@@ -29,7 +29,7 @@ class AddECRForm(forms.ModelForm):
             'all':('/static/css/form.css',),
         }
         # jsi18n is required by the widget
-        js = ('/admin/jsi18n/',)
+        js = ('/static/javascript/jsi18n.js',)
 
 
 class AddECOForm(forms.ModelForm):
@@ -51,7 +51,7 @@ class AddECOForm(forms.ModelForm):
             'all':('/static/css/form.css',),
         }
         # jsi18n is required by the widget
-        js = ('/admin/jsi18n/',)
+        js = ('/static/javascript/jsi18n.js',)
 
 class CreateRevision(forms.ModelForm):
 

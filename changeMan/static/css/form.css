@@ -3,7 +3,7 @@
 .selector {
     width: 800px;
     float: left;
-}
+   }
 
 .selector select {
     width: 380px;
@@ -243,4 +243,20 @@ a.active.selector-clearall:focus, a.active.selector-clearall:hover {
     display: inline-block;
     height: 18px;
     width: 18px;
+}
+
+textarea {
+    width: 40vw;
+    height: 12.5vh;
+    position: relative;
+}
+
+label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.fieldWrapper {
+    position: relative;
+    left: 25vw;
 }
