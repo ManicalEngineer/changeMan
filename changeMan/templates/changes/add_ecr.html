@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+  {% if user.is_authenticated %}
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+      <button type="submit">Save ECR</button>
+    </form>
+    <script type="text/javascript" src="{% static "javascript/rules.js" %}"></script>
+  {% else %}
+    <h1>You must be logged in to add or edit ECRs</h1>
+    <script>
+      window.location = "/access/login/";
+    </script>
+    <a href="/access/login/">Log In</a>
+  {% endif %}
+{% endblock %}

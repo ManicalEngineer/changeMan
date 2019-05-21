@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href= "{% static "css/base.css" %}">
+</head>
+<body>
+  <header>
+    <img id="header-img" src="{% static "images/ml-logo.png" %}">
+    <div class="navbar">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'add_part' %}">Add Part</a>
+      <div class="dropdown">
+        <button class="dropbtn">ECR <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'add_ecr' %}">Add</a>
+          <a href="{% url 'ecr_list' %}">List</a>
+        </div>
+      </div> 
+      <div class="dropdown">
+        <button class="dropbtn">ECO <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'add_eco' %}">Add</a>
+          <a href="{% url 'eco_list' %}">List</a>
+        </div>
+      </div>
+    </div>
+
+  </header>
+  {% block content %}
+  {% endblock %}
+</body>
+</html>

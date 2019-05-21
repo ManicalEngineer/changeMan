@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<h1>Active ECOs</h1>
+<h2>Open ECOs</h2>
+<table>
+  <tr>
+    <th>ECO</th>
+    <th>Title</th>
+    <th>Created Date</th>
+    <th>Created By</th>
+    <th>Complete By</th>
+    <th>Lead Engineer</th>
+  </tr>
+  {% for eco in op_ecos %}
+  <tr>
+    <td class="cell">ECO{{ eco.ECO_number }}</td>
+    <td class="cell">{{ eco.eco_title }}</td>
+    <td class="cell">{{ eco.create_date }}</td>
+    <td class="cell">{{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</td>
+    <td class="cell">{{ eco.deadline }}</td>
+    <td class="cell">{{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</td>
+    <td class="cell"><a class="button" href="{% url 'eco_detail' eco.ECO_number %}">View</a><a class="button" href="{% url 'eco_edit' eco.ECO_number %}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>In Progress  ECOs</h2>
+<table>
+  <tr>
+    <th>ECO</th>
+    <th>Title</th>
+    <th>Created Date</th>
+    <th>Created By</th>
+    <th>Complete By</th>
+    <th>Lead Engineer</th>
+  </tr>
+  {% for eco in ip_ecos %}
+  <tr>
+    <td class="cell">ECO{{ eco.ECO_number }}</td>
+    <td class="cell">{{ eco.eco_title }}</td>
+    <td class="cell">{{ eco.create_date }}</td>
+    <td class="cell">{{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</td>
+    <td class="cell">{{ eco.deadline }}</td>
+    <td class="cell">{{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</td>
+    <td class="cell"><a class="button" href="{% url 'eco_detail' eco.ECO_number %}">View</a><a class="button" href="{% url 'eco_edit' eco.ECO_number %}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>On Hold ECOs</h2>
+<table>
+  <tr>
+    <th>ECO</th>
+    <th>Title</th>
+    <th>Created Date</th>
+    <th>Created By</th>
+    <th>Complete By</th>
+    <th>Lead Engineer</th>
+  </tr>
+  {% for eco in oh_ecos %}
+  <tr>
+    <td class="cell">ECO{{ eco.ECO_number }}</td>
+    <td class="cell">{{ eco.eco_title }}</td>
+    <td class="cell">{{ eco.create_date }}</td>
+    <td class="cell">{{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</td>
+    <td class="cell">{{ eco.deadline }}</td>
+    <td class="cell">{{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</td>
+    <td class="cell"><a class="button" href="{% url 'eco_detail' eco.ECO_number %}">View</a><a class="button" href="{% url 'eco_edit' eco.ECO_number %}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Created ECOs</h2>
+<table>
+  <tr>
+    <th>ECO</th>
+    <th>Title</th>
+    <th>Created Date</th>
+    <th>Created By</th>
+    <th>Complete By</th>
+    <th>Lead Engineer</th>
+  </tr>
+  {% for eco in cr_ecos %}
+  <tr>
+    <td class="cell">ECO{{ eco.ECO_number }}</td>
+    <td class="cell">{{ eco.eco_title }}</td>
+    <td class="cell">{{ eco.create_date }}</td>
+    <td class="cell">{{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</td>
+    <td class="cell">{{ eco.deadline }}</td>
+    <td class="cell">{{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</td>
+    <td class="cell"><a class="button" href="{% url 'eco_detail' eco.ECO_number %}">View</a><a class="button" href="{% url 'eco_edit' eco.ECO_number %}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

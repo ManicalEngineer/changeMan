@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% if user.is_authenticated %}
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+
+      <button type="submit">Save ECO</button>
+    </form>
+  {% else %}
+  <h1>You must be logged in to add or edit ECOs</h1>
+  <script>
+    window.location = "/access/login/";
+  </script>
+  <a href="/access/login/">Log In</a>
+{% endif %}
+{% endblock %}

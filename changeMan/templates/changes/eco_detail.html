@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href= "{% static "css/detail.css" %}">
+    <h1>ECO{{ eco.ECO_number }} - {{ eco.eco_title }} </h1> Due: {{ eco.deadline }}<br>
+    Created on: {{ eco.create_date }}<br>
+    By: {{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}<br>
+    Related ECR: <a href="{% url 'ecr_detail' eco.ECR_number %}">ECR{{ eco.ECR_number }}</a><br>
+    Responsible Engineer: {{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}, <br>
+    <div class="title">
+      <h2>Affected Parts</h2>
+      <div class="data">
+
+        <table>
+          <tr>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Revision</th>
+          </tr>
+          {% for part in eco.part_numbers.all %}
+          <tr>
+            <td><a href="{% url 'part_summary' part.part_number %}">{{ part.part_number }}</a> 
+            </td>
+            <td>{{ part.part_description }}</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+          
+      </table>
+      </div>
+    </div>
+
+    <div class="title">
+      <h2>Affected Product</h2>
+      <div class="data">
+        {{ eco.product }}<br>
+      </div>
+    </div>
+    <div class="title">
+      <h2>Change or Improvements</h2>
+      <div class="data">
+        {{ eco.change }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Justification</h2>
+      <div class="data">
+        {{ eco.reason }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Go</h2>
+      <div class="data">
+        <h3>GO:</h3> {{ eco.go }} - <h3>Status:</h3> {{ eco.go_status }}  <h3>Notes:</h3> {{ eco.go_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Test</h2>
+      <div class="data">
+        <h3>Test:</h3> {{ eco.test }} - <h3>Status:</h3> {{ eco.test_status }}  <h3>Notes:</h3> {{ eco.test_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Calculations</h2>
+      <div class="data">
+        <h3>Calculations:</h3> {{ eco.calcs }} - <h3>Status:</h3> {{ eco.calcs_status }}  <h3>Notes:</h3> {{ eco.calcs_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Archvie</h2>
+      <div class="data">
+        <h3>Archvie:</h3> {{ eco.archvie }} - <h3>Status:</h3> {{ eco.archvie_status }}  <h3>Notes:</h3> {{ eco.archvie_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2><param name="" value="">Part</h2>
+      <div class="data">
+        <h3>Part:</h3> {{ eco.part }} - <h3>Status:</h3> {{ eco.part_status }}  <h3>Notes:</h3> {{ eco.part_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Drawings</h2>
+      <div class="data">
+        <h3>Drawings:</h3> {{ eco.drawings }} - <h3>Status:</h3> {{ eco.drawings_status }}  <h3>Notes:</h3> {{ eco.drawings_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Jigs</h2>
+      <div class="data">
+        <h3>Jigs:</h3> {{ eco.jigs }} - <h3>Status:</h3> {{ eco.jigs_status }}  <h3>Notes:</h3> {{ eco.jigs_notes }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Patterns</h2>
+      <div class="data">
+        <h3>Patterns:</h3> {{ eco.patterns }} - <h3>Status:</h3> {{ eco.patterns_status }}  <h3>Notes:</h3> {{ eco.patterns_notes }}
+      </div>
+    </div>
+<a href="{% url 'eco_detail' eco.ECO_number|add:"-1" %}">Prev</a> <a href="{% url 'eco_detail' eco.ECO_number|add:"1" %}">Next</a>
+{% endblock %}

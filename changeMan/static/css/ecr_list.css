@@ -1,0 +1,58 @@
+table {
+	margin: auto;
+	width: 65%;
+	padding: 20px;
+}
+
+td {
+	padding: 5px 0 5px 0;
+	text-align: center;
+}
+
+tr:nth-child(even) {
+	background-color: lightgrey;
+}
+
+h1 {
+	margin: auto;
+	text-align: center;
+}
+
+h2 {
+	margin: auto;
+	text-align: center;
+	padding: 20px;
+}
+
+.button {
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	background-color: red;
+	padding: 5px;
+	transition-duration: 0.4s;
+	margin: 3px;
+}
+
+.button:hover {
+	background-color: yellow;
+	color: black;
+	transform: scale(.5, .5);
+}
+
+.ecr-notes {
+	background-color: grey;
+	height:10vh;
+	width: 10vw;
+
+}
+
+.hidden {
+	display: none;
+}
+
+.block {
+	display: block;
+}

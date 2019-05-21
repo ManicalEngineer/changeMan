@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+{% for item in ecrs %}
+	ECR{{ item.ECR_number }}<br>
+	{{ item.create_date }}<br>
+	{{ item.close_date }}<br>
+
+{% endfor %}
+
+{{ on_time }}
+
+{% endblock %}

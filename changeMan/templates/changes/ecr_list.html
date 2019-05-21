@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<h1>Active ECR List</h1>
+<h2>Open ECRs</h2>
+<table>
+  <tr>
+    <th>ECR</th>
+    <th>Title</th>
+    <th>Created Date</th>
+    <th>Created By</th>
+    <th>Status</th>
+  </tr>
+  {% if op_ecrs %}
+    {% for ecr in op_ecrs %}
+    <tr>
+      <td class="ecr-num cell">ECR{{ ecr.ECR_number }}<div class="ecr-notes hidden"><span class="">Notes:</span> {{ ecr.notes }}</div></td>
+      
+      <td class="cell">{{ ecr.ecr_title }}</td>
+      <td class="cell">{{ ecr.create_date }}</td>
+      <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
+      <td class="cell">{{ ecr.get_status_display }}</td>
+      <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
+      
+    </tr>
+    {% endfor %}
+    </table>
+  {% else %}
+    <h2>No Open ECRs</h2>
+  {% endif %}  
+<h2>In Progress ECRs</h2>
+<table>
+    <tr>
+      <th>ECR</th>
+      <th>Title</th>
+      <th>Created Date</th>
+      <th>Created By</th>
+      <th>Status</th>
+    </tr>
+    {% if ip_ecrs %}
+    {% for ecr in ip_ecrs %}
+    <tr>
+      <td class="ecr-num cell">ECR{{ ecr.ECR_number }}<div class="ecr-notes hidden"><span class="">Notes:</span> {{ ecr.notes }}</div></td>
+      
+      <td class="cell">{{ ecr.ecr_title }}</td>
+      <td class="cell">{{ ecr.create_date }}</td>
+      <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
+      <td class="cell">{{ ecr.get_status_display }}</td>
+      <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
+      
+    </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+      <h2>No In Progress ECRs</h2>
+    {% endif %}
+    <h2>On Hold ECRs</h2>
+  <table>
+    <tr>
+      <th>ECR</th>
+      <th>Title</th>
+      <th>Created Date</th>
+      <th>Created By</th>
+      <th>Status</th>
+    </tr>
+    {% if oh_ecrs %}
+    {% for ecr in oh_ecrs %}
+    <tr>
+      <td class="ecr-num cell">ECR{{ ecr.ECR_number }}<div class="ecr-notes hidden"><span class="">Notes:</span> {{ ecr.notes }}</div></td>
+      
+      <td class="cell">{{ ecr.ecr_title }}</td>
+      <td class="cell">{{ ecr.create_date }}</td>
+      <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
+      <td class="cell">{{ ecr.get_status_display }}</td>
+      <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
+      
+    </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+      <h2>No On Hold ECRs</h2>
+    {% endif %}
+  <script src="{% static "javascript/ecr_list.js" %}"></script>
+
+{% endblock %}

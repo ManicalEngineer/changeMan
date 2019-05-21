@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href= "{% static "css/detail.css" %}">
+    <h1>ECR{{ ecr.ECR_number }}: {{ ecr.ecr_title }}  -  {{ ecr.status }}</h1>
+    Created on: {{ ecr.create_date }}<br>
+    By: {{ ecr.initiated_by.last_name }}, {{ ecr.initiated_by.first_name }}
+    <div class="title">
+      <h2>Affected Parts</h2>
+      <div class="data">
+        {% for part in ecr.part_numbers.all %}
+          <a href="{% url 'part_summary' part.part_number %}">{{ part.part_number }}: {{ part.part_description }}</a><br>
+        {% endfor %}<br>
+      </div>
+    </div>
+
+    <div class="title">
+      <h2>Idenified Problem or Improvements</h2>
+      <div class="data">
+        {{ ecr.requested_change }}<br>
+      </div>
+    </div>
+    <div class="title">
+      <h2>Change or Improvements Justification</h2>
+      <div class="data">
+        {{ ecr.justification }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Proposed Solution & Cost Esitmate</h2>
+      <div class="data">
+        {{ ecr.solution }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Technical Design & Review Requirements, Production Impact</h2>
+      <div class="data">
+        {{ ecr.requirements }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Product Impact</h2>
+      <div class="data">
+        {{ ecr.impact }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Excution Steps</h2>
+      <div class="data">
+        {{ ecr.steps }}
+      </div>
+    </div>
+    <div class="title">
+      <h2>Temporary Remediation If Needed</h2>
+      <div class="data">
+        {{ ecr.remediation }}
+      </div>
+    </div>
+
+    <div class="title">
+      <h2>Notes</h2>
+      <div class="data">
+        {{ ecr.notes }}
+      </div>
+    </div>
+<a href="{% url 'ecr_detail' ecr.ECR_number|add:"-1" %}">Prev</a> <a href="{% url 'ecr_detail' ecr.ECR_number|add:"1" %}">Next</a>
+{% endblock %}

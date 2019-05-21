@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<style>
+  h1 {
+    text-align: left;
+  }
+  #id-line {
+    width: 100vw;
+    text-align: center;
+  }
+</style>
+  <body>
+    <h1>{{ part.part_number }} - {{ part.part_description }}</h1>
+    <span id="by-line">Created By: {{ part.initiated_by.last_name }}, {{ part.initiated_by.first_name }} on {{ part.create_date }}</span>
+    <h2>Revisions</h2>
+    <table>
+      <th>
+        Revision
+      </th>
+      <th>
+        Change Notes
+      </th>
+      <th>
+        Related ECO
+      </th>
+      {% for rev in revs %}
+      <tr>
+        <td>{{ rev.revision_level }}</td>
+        <td>{{ rev.description }}</td>
+        <td><a class="button" href="{% url 'eco_detail' rev.ECO_number %}">ECO{{ rev.ECO_number }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>Related ECRs</h2>
+    <table>
+      <th>ECR</th>
+      <th>Title</th>
+      <th>Created</th>
+      <th>Status</th>
+      {% for ecr in ecrs %}
+      <tr>
+        <td>
+          <a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">ECR{{ ecr.ECR_number }}</a>
+        </td>
+        <td>
+          {{ ecr.ecr_title }}
+        </td>
+        <td>
+          {{ ecr.create_date }}
+        </td>
+        <td>
+          {{ ecr.oa_status }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+{% endblock %}
