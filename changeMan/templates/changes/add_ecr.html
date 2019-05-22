@@ -14,7 +14,7 @@
         {{ form.ecr_title }}
       </div>
 
-      <div class="fieldWrapper">
+      <div class="fieldWrapper" id="parts">
         {{ form.part_numbers.errors }}
         <label id="partsLBL" for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
         {{ form.part_numbers }}
@@ -22,7 +22,7 @@
 
       <div class="fieldWrapper">
         {{ form.requested_change.errors }}
-        <label id="changeLBL" for="{{ form.requested_change.id_for_label }}">Reqeusted Change or Improvement</label><br>
+        <label id="changeLBL" for="{{ form.requested_change.id_for_label }}">Requested Change or Improvement</label><br>
         {{ form.requested_change }}
       </div>
 

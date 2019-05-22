@@ -13,15 +13,15 @@ class ECR(models.Model):
         ('CL', 'Closed'),
         ('IP', 'In Progress'),
         ('OP', 'Open'),
-        )
+    )
 
     DISPO_CHOICES = (
-        ('NA','------'),
+        ('NA', '------'),
         ('WNF', 'Will Not Fix'),
         ('FX', 'Fixed'),
         ('ECO', 'Create ECO'),
         ('NT', 'No Trouble Found'),
-        )
+    )
 
     PRIORITY_CHOICES = {
         ('1', 'High'),
@@ -36,7 +36,7 @@ class ECR(models.Model):
     ECR_number = models.AutoField(primary_key=True, verbose_name="ECR Number")
     part_numbers = models.ManyToManyField("parts.Part", verbose_name="Affected Part Numbers")
     requested_change = models.CharField(max_length=300, verbose_name="Requested Change or Improvement")
-    
+
     solution = models.CharField(max_length=300, verbose_name="Solution & Cost")
     requirements = models.CharField(max_length=300)
     impact = models.CharField(max_length=300)
@@ -60,7 +60,7 @@ class ECO(models.Model):
         ('IP', 'In Progress'),
         ('OP', 'Open'),
         ('CR', 'Created'),
-        )
+    )
 
     PRIORITY_CHOICES = {
         ('1', 'High'),
