@@ -9,6 +9,8 @@ from parts.models import Part
 from .forms import AddECRForm, AddECOForm, CreateRevision
 
 # Create your views here.
+
+
 def dashboard(request):
     if request.user.is_authenticated:
         ecrs = ECR.objects.filter(engineer__exact=request.user)
@@ -18,16 +20,19 @@ def dashboard(request):
     else:
         return render(request, 'redirect.html')
 
+
 def ecr_list(request):
     op_ecrs = ECR.objects.filter(status__exact='OP')
     ip_ecrs = ECR.objects.filter(status__exact='IP')
     oh_ecrs = ECR.objects.filter(status__exact='OH')
-    return render(request, 'changes/ecr_list.html', {'op_ecrs':op_ecrs, 'ip_ecrs':ip_ecrs, 'oh_ecrs':oh_ecrs})
+    return render(request, 'changes/ecr_list.html', {'op_ecrs': op_ecrs, 'ip_ecrs': ip_ecrs, 'oh_ecrs': oh_ecrs})
+
 
 def ecr_detail(request, ecr_number):
     ecr = get_object_or_404(ECR, pk=ecr_number)
     mf = ECR._meta.get_fields()
     return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf})
+
 
 def ecr_add(request):
     if request.method == "POST":
@@ -42,13 +47,14 @@ def ecr_add(request):
                 ecr.deadline = ecr.create_date + timedelta(weeks=2)
             else:
                 ecr.deadline = ecr.create_date + timedelta(months=3)
-            
+
             ecr = form.save()
             return redirect('ecr_detail', ecr_number=ecr.ECR_number)
     else:
         form = AddECRForm()
 
     return render(request, 'changes/add_ecr.html', {'form': form})
+
 
 def ecr_edit(request, ecr_number):
     ecr = ECR.objects.get(pk=ecr_number)
@@ -57,7 +63,7 @@ def ecr_edit(request, ecr_number):
         if form.is_valid():
             ecr = form.save()
             ecr.initiated_by = request.user
-            
+
             if ecr.priority == '1':
                 ecr.deadline = datetime.now() + timedelta(days=3)
                 ecr.save()
@@ -76,8 +82,10 @@ def ecr_edit(request, ecr_number):
                 eco.ECR_number = ecr
                 eco.save()
                 eco.deadline = ecr.deadline
-                eco.part_numbers.set(ecr.part_numbers.all()) 
+                eco.part_numbers.set(ecr.part_numbers.all())
                 eco.initiated_by = request.user
+                eco.reason = ecr.requested_change
+                eco.change = ecr.solution
                 eco.save()
                 return redirect('eco_edit', eco_number=eco.ECO_number)
             elif ecr.status == 'CL':
@@ -98,11 +106,12 @@ def ecr_edit(request, ecr_number):
         #         'remediation': ecr.remediation,
         #         'notes': ecr.notes,
         #         'status': ecr.status,
-        #         'disposition': ecr.ecr_disposition, 
+        #         'disposition': ecr.ecr_disposition,
         #         }
 
         form = AddECRForm(instance=ecr)
-    return render(request, "changes/add_ecr.html", {'form':form})
+    return render(request, "changes/add_ecr.html", {'form': form})
+
 
 def eco_add(request):
     if request.method == "POST":
@@ -117,6 +126,7 @@ def eco_add(request):
 
     return render(request, 'changes/add_eco.html', {'form': form})
 
+
 def eco_edit(request, eco_number):
     eco = ECO.objects.get(pk=eco_number)
     if request.method == "POST":
@@ -130,12 +140,14 @@ def eco_edit(request, eco_number):
 
     else:
         form = AddECOForm(instance=eco)
-    return render(request, "changes/add_eco.html", {'form':form})
+    return render(request, "changes/add_eco.html", {'form': form})
+
 
 def eco_detail(request, eco_number):
     eco = get_object_or_404(ECO, pk=eco_number)
     mf = ECO._meta.get_fields()
     return render(request, 'changes/eco_detail.html', {'eco': eco, 'mf': mf})
+
 
 def eco_list(request):
     op_ecos = ECO.objects.filter(oa_status__exact='OP')
@@ -143,8 +155,8 @@ def eco_list(request):
     oh_ecos = ECO.objects.filter(oa_status__exact='OH')
     cr_ecos = ECO.objects.filter(oa_status__exact='CR')
 
+    return render(request, 'changes/eco_list.html', {'op_ecos': op_ecos, 'ip_ecos': ip_ecos, 'oh_ecos': oh_ecos, 'cr_ecos': cr_ecos})
 
-    return render(request, 'changes/eco_list.html', {'op_ecos':op_ecos, 'ip_ecos':ip_ecos, 'oh_ecos':oh_ecos, 'cr_ecos':cr_ecos})
 
 def revise_drawing(request, drawing_number):
     if request.method == "POST":
@@ -156,22 +168,23 @@ def revise_drawing(request, drawing_number):
 
     return render(request, 'changes/add_rev.html', {'form': form})
 
+
 def performance(request):
     closed_ecrs = ECR.objects.filter(status__exact="CL").filter(priority__exact="1")
     oh_ecrs = ECR.objects.filter(status__exact="OH")
     ip_ecrs = ECR.objects.filter(status__exact="IP")
     op_ecrs = ECR.objects.filter(status__exact="OP")
-    closed_p1_ecos_mo = ECO.objects.filter(oa_status__exact="CL").filter(priority__exact="1").filter(createdate__lte=datetime.datetime.today(), createdate__gt=datetime.datetime.today()-datetime.timedelta(days=30))
-    
+    closed_p1_ecos_mo = ECO.objects.filter(oa_status__exact="CL").filter(priority__exact="1").filter(createdate__lte=datetime.datetime.today(), createdate__gt=datetime.datetime.today() - datetime.timedelta(days=30))
+
     on_time = 0
 
     for eco in closed_p1_ecos_mo:
         open_day = eco.create_date
         close_day = eco.close_date
-        duratation = abs(close_day-open_day).days
+        duratation = abs(close_day - open_day).days
         if duratation >= 3:
             on_time = on_time + 1
 
-    on_time_prct_p1_mo = on_time/len(closed_p1_ecos_mo)
+    on_time_prct_p1_mo = on_time / len(closed_p1_ecos_mo)
 
     return render(request, 'changes/performance.html', {'ecos': closed_p1_ecos_mo, 'on_time': on_time_prct_p1_mo})

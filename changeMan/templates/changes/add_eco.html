@@ -4,7 +4,109 @@
     <form action="" method="post">
       {% csrf_token %}
       {{ form.media }}
-      {{ form.as_p }}
+      {{ form.non_field_errors }}
+      <div id="others">
+        <div class="fieldWrapper">
+          {{ form.ECR_number.errors }}
+          <label for="{{ form.ECR_number.id_for_label }}">ECR Number</label>
+          {{ form.ECR_number }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.deadline.errors }}
+          <label for="{{ form.deadline.id_for_label }}">Deadline</label>
+          {{ form.deadline }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.product.errors }}
+          <label for="{{ form.product.id_for_label }}">Affected Product(s)</label>
+          {{ form.product }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.engineer.errors }}
+          <label for="{{ form.engineer.id_for_label }}">Responsible Party</label>
+          {{ form.engineer }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.change.errors }}
+          <label for="{{ form.change.id_for_label }}">Change(s)</label>
+          {{ form.change }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.reason.errors }}
+          <label for="{{ form.reason.id_for_label }}">Reason</label>
+          {{ form.reason }}
+        </div>
+      </div>
+        <div class="fieldWrapper">
+          {{ form.part_numbers.errors }}
+          <label for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
+          {{ form.part_numbers }}
+        </div>
+      <div id="pn_container"> 
+
+      </div>
+
+
+      <table>
+        <tr>
+          <h2>Sign Off Items as they are completed</h2>
+        </tr>
+        <tr>
+          <th>Item</th>
+          <th>Sign Off</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>GO</td>
+          <td>{{ form.go.errors }} {{ form.go }}</td>
+          <td>{{ form.go_status.errors }} {{ form.go_status }}</td>
+          <td>{{ form.go_notes.errors }} {{ form.go_notes }}</td>
+        </tr>
+        <tr>
+          <td>Testing</td>
+          <td>{{ form.test.errors }} {{ form.test }}</td>
+          <td>{{ form.test_status.errors }} {{ form.test_status }}</td>
+          <td>{{ form.test_notes.errors }} {{ form.test_notes }}</td>
+        </tr>
+        <tr>
+          <td>Calculations</td>
+          <td>{{ form.calcs.errors }} {{ form.calcs }}</td>
+          <td>{{ form.calcs_status.errors }} {{ form.calcs_status }}</td>
+          <td>{{ form.calcs_notes.errors }} {{ form.calcs_notes }}</td>
+        </tr>
+        <tr>
+          <td>Archive Drawing(s)</td>
+          <td>{{ form.archive.errors }} {{ form.archive }}</td>
+          <td>{{ form.archive_status.errors }} {{ form.archive_status }}</td>
+          <td>{{ form.archive_notes.errors }} {{ form.archive_notes }}</td>
+        </tr>
+        <tr>
+          <td>Parts</td>
+          <td>{{ form.part.errors }} {{ form.part }}</td>
+          <td>{{ form.part_status.errors }} {{ form.part_status }}</td>
+          <td>{{ form.part_notes.errors }} {{ form.part_notes }}</td>
+        </tr>
+        <tr>
+          <td>Drawings</td>
+          <td>{{ form.drawings.errors }} {{ form.drawings }}</td>
+          <td>{{ form.drawings_status.errors }} {{ form.drawings_status }}</td>
+          <td>{{ form.drawings_notes.errors }} {{ form.drawings_notes }}</td>
+        </tr>
+        <tr>
+          <td>Jigs</td>
+          <td>{{ form.jigs.errors }} {{ form.jigs }}</td>
+          <td>{{ form.jigs_status.errors }} {{ form.jigs_status }}</td>
+          <td>{{ form.jigs_notes.errors }} {{ form.jigs_notes }}</td>
+        </tr>
+        <tr>
+          <td>Patterns</td>
+          <td>{{ form.patterns.errors }} {{ form.patterns }}</td>
+          <td>{{ form.patterns_status.errors }} {{ form.patterns_status }}</td>
+          <td>{{ form.patterns_notes.errors }} {{ form.patterns_notes }}</td>
+        </tr>
+
+      </table>
 
       <button type="submit">Save ECO</button>
     </form>
