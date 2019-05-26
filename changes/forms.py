@@ -41,10 +41,12 @@ class AddECOForm(forms.ModelForm):
                   'reason', 'go', 'go_status', 'go_notes', 'test', 'test_status', 'test_notes',
                   'calcs', 'calcs_status', 'calcs_notes', 'archive', 'archive_status', 'archive_notes',
                   'part', 'part_status', 'part_notes', 'drawings', 'drawings_status', 'drawings_notes',
-                  'jigs', 'jigs_status', 'jigs_notes', 'patterns', 'patterns_status', 'patterns_notes'
+                  'jigs', 'jigs_status', 'jigs_notes', 'patterns', 'patterns_status', 'patterns_notes',
+                  'priority', 'eng_sign', 'oa_status',
                   )
         widgets = {
             'part_numbers': FilteredSelectMultiple(Part, is_stacked=True),
+            'deadline': widgets.SelectDateWidget(),
             'change': widgets.Textarea(),
             'reason': widgets.Textarea(),
             'test_notes': widgets.Textarea(),

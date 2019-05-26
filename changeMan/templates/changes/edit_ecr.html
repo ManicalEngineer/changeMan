@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+{% if user.is_authenticated %}
 <script type="text/javascript" src="{% static "javascript/rules.js" %}"></script>
     <form action="" method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <button type="submit">Edit ECR</button>
     </form>
-
+ {% else %}
+ {% include 'redirect.html' %}
+ {% endif %}
 {% endblock %}

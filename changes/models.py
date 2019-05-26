@@ -56,10 +56,16 @@ class ECR(models.Model):
 class ECO(models.Model):
     STATUS_CHOICES = (
         ('OH', 'On Hold'),
-        ('CL', 'Closed'),
+        ('CL', 'Complete'),
         ('IP', 'In Progress'),
         ('OP', 'Open'),
         ('CR', 'Created'),
+    )
+
+    ITEM_STATUS_CHOICES = (
+        ('CL', 'Complete'),
+        ('IP', 'In Progress'),
+        ('NA', 'Not Applicable')
     )
 
     PRIORITY_CHOICES = {
@@ -80,29 +86,31 @@ class ECO(models.Model):
     change = models.CharField(max_length=300, blank=True, null=True)
     reason = models.CharField(max_length=300, blank=True, null=True)
     go = models.CharField(max_length=10, blank=True, null=True)
-    go_status = models.CharField(max_length=20, blank=True, null=True)
+    go_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     go_notes = models.CharField(max_length=300, blank=True, null=True)
     test = models.CharField(max_length=10, blank=True, null=True)
-    test_status = models.CharField(max_length=20, blank=True, null=True)
+    test_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     test_notes = models.CharField(max_length=300, blank=True, null=True)
     calcs = models.CharField(max_length=10, blank=True, null=True)
-    calcs_status = models.CharField(max_length=20, blank=True, null=True)
+    calcs_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     calcs_notes = models.CharField(max_length=300, blank=True, null=True)
     archive = models.CharField(max_length=10, blank=True, null=True)
-    archive_status = models.CharField(max_length=20, blank=True, null=True)
+    archive_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     archive_notes = models.CharField(max_length=300, blank=True, null=True)
     part = models.CharField(max_length=10, blank=True, null=True)
-    part_status = models.CharField(max_length=20, blank=True, null=True)
+    part_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     part_notes = models.CharField(max_length=300, blank=True, null=True)
     drawings = models.CharField(max_length=10, blank=True, null=True)
-    drawings_status = models.CharField(max_length=20, blank=True, null=True)
+    drawings_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     drawings_notes = models.CharField(max_length=300, blank=True, null=True)
     jigs = models.CharField(max_length=10, blank=True, null=True)
-    jigs_status = models.CharField(max_length=20, blank=True, null=True)
+    jigs_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     jigs_notes = models.CharField(max_length=300, blank=True, null=True)
     patterns = models.CharField(max_length=10, blank=True, null=True)
-    patterns_status = models.CharField(max_length=20, blank=True, null=True)
+    patterns_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     patterns_notes = models.CharField(max_length=300, blank=True, null=True)
+    completed_date = models.DateField(blank=True, null=True)
+    eng_sign = models.CharField(max_length=30,  blank=True, null=True)
     oa_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="Created")
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='1')
 

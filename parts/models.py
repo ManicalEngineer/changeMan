@@ -15,7 +15,7 @@ class Part(models.Model):
     #revision = models.ForeignKey('changes.Revision', on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
-        rtn_str = f'{str(self.part_number)} - {str(self.part_description)}'
+        rtn_str = self.part_number + ' - ' + self.part_description
         return rtn_str
 
 # class Drawing(models.Model):
