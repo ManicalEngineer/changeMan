@@ -33,6 +33,6 @@ urlpatterns = [
     path('eco/edit/<int:eco_number>/', cViews.eco_edit, name="eco_edit"),
     path('eco/<int:eco_number>/', cViews.eco_detail, name="eco_detail"),
     path('eco/list/', cViews.eco_list, name="eco_list"),
-    path('rev/add/<str:drawing_number>', cViews.revise_drawing, name="add_rev"),
+    path('rev/add/<str:drawing_number>/<int:eco_number>/', cViews.revise_drawing, name="add_rev"),
     path('performance/', cViews.performance, name="performance")
 ]

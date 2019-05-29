@@ -73,11 +73,7 @@
 </div>
 <script src="{% static "javascript/ecr_list.js" %}"></script>
 {% else %}
-  <h1>You must be logged in to add or edit ECOs</h1>
-  <script>
-    window.location = "/access/login/";
-  </script>
-  <a href="/access/login/">Log In</a>
+   {% include 'redirect.html' %}
 {% endif %}
 
 {% endblock %}

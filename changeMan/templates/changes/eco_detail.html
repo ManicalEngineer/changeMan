@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+{% if user.is_authenticated %}
 <link rel="stylesheet" href= "{% static "css/detail.css" %}">
-    <h1>ECO{{ eco.ECO_number }} - {{ eco.eco_title }} </h1> Due: {{ eco.deadline }}<br>
-    Created on: {{ eco.create_date }}<br>
-    By: {{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}<br>
-    Related ECR: <a href="{% url 'ecr_detail' eco.ECR_number %}">ECR{{ eco.ECR_number }}</a><br>
-    Responsible Engineer: {{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}, <br>
+    <h1>ECO{{ eco.ECO_number }} - {{ eco.eco_title }} </h1> 
+    <div id="hk-data">
+      <span>Due: {{ eco.deadline }}</span><br>
+      <span>Status: {{ eco.get_oa_status_display }}</span><br>
+      <span>Created on: {{ eco.create_date }}</span><br>
+      <span>By: {{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</span><br>
+      <span>Related ECR: <a class="button" href="{% url 'ecr_detail' eco.ECR_number %}">ECR{{ eco.ECR_number }}</a></span><br>
+      <span>Responsible Engineer: {{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</span> <br>
+    </div>
     <div class="title">
       <h2>Affected Parts</h2>
       <div class="data">
@@ -19,10 +24,10 @@
           </tr>
           {% for part in eco.part_numbers.all %}
           <tr>
-            <td><a href="{% url 'part_summary' part.part_number %}">{{ part.part_number }}</a> 
+            <td><a class="button" href="{% url 'part_summary' part.part_number %}">{{ part.part_number }}</a> 
             </td>
             <td>{{ part.part_description }}</td>
-            <td></td>
+            <td><a class="button" href="{% url 'add_rev' part.part_number eco.ECO_number %}" target="_blank">Revise Drawing</a></td>
           </tr>
           {% endfor %}
           
@@ -48,53 +53,67 @@
         {{ eco.reason }}
       </div>
     </div>
-    <div class="title">
-      <h2>Go</h2>
-      <div class="data">
-        <h3>GO:</h3> {{ eco.go }} - <h3>Status:</h3> {{ eco.go_status }}  <h3>Notes:</h3> {{ eco.go_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Test</h2>
-      <div class="data">
-        <h3>Test:</h3> {{ eco.test }} - <h3>Status:</h3> {{ eco.test_status }}  <h3>Notes:</h3> {{ eco.test_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Calculations</h2>
-      <div class="data">
-        <h3>Calculations:</h3> {{ eco.calcs }} - <h3>Status:</h3> {{ eco.calcs_status }}  <h3>Notes:</h3> {{ eco.calcs_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Archvie</h2>
-      <div class="data">
-        <h3>Archvie:</h3> {{ eco.archvie }} - <h3>Status:</h3> {{ eco.archvie_status }}  <h3>Notes:</h3> {{ eco.archvie_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2><param name="" value="">Part</h2>
-      <div class="data">
-        <h3>Part:</h3> {{ eco.part }} - <h3>Status:</h3> {{ eco.part_status }}  <h3>Notes:</h3> {{ eco.part_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Drawings</h2>
-      <div class="data">
-        <h3>Drawings:</h3> {{ eco.drawings }} - <h3>Status:</h3> {{ eco.drawings_status }}  <h3>Notes:</h3> {{ eco.drawings_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Jigs</h2>
-      <div class="data">
-        <h3>Jigs:</h3> {{ eco.jigs }} - <h3>Status:</h3> {{ eco.jigs_status }}  <h3>Notes:</h3> {{ eco.jigs_notes }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Patterns</h2>
-      <div class="data">
-        <h3>Patterns:</h3> {{ eco.patterns }} - <h3>Status:</h3> {{ eco.patterns_status }}  <h3>Notes:</h3> {{ eco.patterns_notes }}
-      </div>
-    </div>
-<a href="{% url 'eco_detail' eco.ECO_number|add:"-1" %}">Prev</a> <a href="{% url 'eco_detail' eco.ECO_number|add:"1" %}">Next</a>
+
+
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Sign Off</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Go</td>
+        <td>{{ eco.go }}</td>
+        <td>{{ eco.get_go_status_display }}</td>
+        <td>{{ eco.go_notes }}</td>
+      </tr>
+      <tr>
+        <td>Test</td>
+        <td>{{ eco.test }}</td>
+        <td>{{ eco.get_test_status_display }}</td>
+        <td>{{ eco.test_notes }}</td>
+      </tr>
+      <tr>
+        <td>Calculations</td>
+        <td>{{ eco.calcs }}</td>
+        <td>{{ eco.get_calcs_status_display }}</td>
+        <td>{{ eco.calcs_notes }}</td>
+      </tr>
+      <tr>
+        <td>Archive</td>
+        <td>{{ eco.archive }}</td>
+        <td>{{ eco.get_archive_status_display }}</td>
+        <td>{{ eco.archive_notes }}</td>
+      </tr>
+      <tr>
+        <td>Part</td>
+        <td>{{ eco.part }}</td>
+        <td>{{ eco.get_part_status_display }}</td>
+        <td>{{ eco.part_notes }}</td>
+      </tr>
+      <tr>
+        <td>Drawings</td>
+        <td>{{ eco.drawings }}</td>
+        <td>{{ eco.get_drawings_status_display }}</td>
+        <td>{{ eco.drawings_notes }}</td>
+      </tr>
+      <tr>
+        <td>Jigs</td>
+        <td>{{ eco.jigs }}</td>
+        <td>{{ eco.get_jigs_status_display }}</td>
+        <td>{{ eco.jigs_notes }}</td>
+      </tr>
+      <tr>
+        <td>Patterns</td>
+        <td>{{ eco.patterns }}</td>
+        <td>{{ eco.get_patterns_status_display }}</td>
+        <td>{{ eco.patterns_notes }}</td>
+      </tr>
+    </table>
+<a class="button" href="{% url 'eco_detail' eco.ECO_number|add:"-1" %}">Prev</a> <a class="button next" href="{% url 'eco_detail' eco.ECO_number|add:"1" %}">Next</a>
+
+{% else %}
+ {% include 'redirect.html' %}
+{% endif %}
 {% endblock %}

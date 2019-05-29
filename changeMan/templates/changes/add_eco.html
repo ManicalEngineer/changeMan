@@ -5,45 +5,58 @@
       {% csrf_token %}
       {{ form.media }}
       {{ form.non_field_errors }}
-      <div id="others">
-        <div class="fieldWrapper">
-          {{ form.ECR_number.errors }}
-          <label for="{{ form.ECR_number.id_for_label }}">ECR Number</label>
-          {{ form.ECR_number }}
+      <div id="top">
+        <div id="others">
+          <div id="basic_info">
+            <div class="fieldWrapper">
+              {{ form.ECR_number.errors }}
+              <label for="{{ form.ECR_number.id_for_label }}">ECR Number</label><br>
+              {{ form.ECR_number }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.deadline.errors }}
+              <label for="{{ form.deadline.id_for_label }}">Deadline</label><br>
+              {{ form.deadline }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.product.errors }}
+              <label for="{{ form.product.id_for_label }}">Affected Product(s)</label><br>
+              {{ form.product }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.engineer.errors }}
+              <label for="{{ form.engineer.id_for_label }}">Responsible Party</label><br>
+              {{ form.engineer }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.priority.errors }}
+              <label for="{{ form.priority.id_for_label }}">ECO Priority</label><br>
+              {{ form.priority }}
+            </div>
+            <div class="fieldWrapper">
+              {{ form.oa_status.errors }}
+              <label for="{{ form.oa_status.id_for_label }}">Over All Status</label><br>
+              {{ form.oa_status }}
+            </div>
+          </div>
+          <div class="fieldWrapper">
+            {{ form.change.errors }}
+            <label for="{{ form.change.id_for_label }}">Change(s)</label><br>
+            {{ form.change }}
+          </div>
+          <div class="fieldWrapper">
+            {{ form.reason.errors }}
+            <label for="{{ form.reason.id_for_label }}">Reason</label><br>
+            {{ form.reason }}
+          </div>
         </div>
-        <div class="fieldWrapper">
-          {{ form.deadline.errors }}
-          <label for="{{ form.deadline.id_for_label }}">Deadline</label>
-          {{ form.deadline }}
-        </div>
-        <div class="fieldWrapper">
-          {{ form.product.errors }}
-          <label for="{{ form.product.id_for_label }}">Affected Product(s)</label>
-          {{ form.product }}
-        </div>
-        <div class="fieldWrapper">
-          {{ form.engineer.errors }}
-          <label for="{{ form.engineer.id_for_label }}">Responsible Party</label>
-          {{ form.engineer }}
-        </div>
-        <div class="fieldWrapper">
-          {{ form.change.errors }}
-          <label for="{{ form.change.id_for_label }}">Change(s)</label>
-          {{ form.change }}
-        </div>
-        <div class="fieldWrapper">
-          {{ form.reason.errors }}
-          <label for="{{ form.reason.id_for_label }}">Reason</label>
-          {{ form.reason }}
-        </div>
-      </div>
-        <div class="fieldWrapper">
+        
+        <div id="parts"class="fieldWrapper">
           {{ form.part_numbers.errors }}
-          <label for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
+          <label id="partsLBL" for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
           {{ form.part_numbers }}
         </div>
-      <div id="pn_container"> 
-
+        
       </div>
 
 
@@ -108,13 +121,15 @@
 
       </table>
 
+      <div class="fieldWrapper">
+          {{ form.eng_sign.errors }}
+          <label for="{{ form.eng_sign.id_for_label }}">Engineering Manger Sign Off</label>
+          {{ form.eng_sign }}
+        </div>
+
       <button type="submit">Save ECO</button>
     </form>
   {% else %}
-  <h1>You must be logged in to add or edit ECOs</h1>
-  <script>
-    window.location = "/access/login/";
-  </script>
-  <a href="/access/login/">Log In</a>
+  {% include 'redirect.html' %}
 {% endif %}
 {% endblock %}

@@ -1,7 +1,72 @@
 .title {
-  padding: 10px;
+  	padding: 10px;
 }
 
 .data {
-  padding-left: 15px;
+	margin: auto;
+  	padding-left: 15px;
+  	width: 60vw;
+}
+
+.button {
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	background-color: red;
+	padding: 5px;
+	transition-duration: 0.4s;
+	margin: 3px;
+}
+
+.button:hover {
+	background-color: yellow;
+	color: black;
+	transform: scale(.5, .5);
+}
+
+.next{
+	float: right;
+}
+
+#hk-data{
+	width: 60vw;
+	margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+}
+
+table {
+	margin: auto;
+	width: 65%;
+	padding: 20px;
+}
+
+td {
+	padding: 5px 3px 5px 3px;
+	text-align: center;
+}
+
+tr:nth-child(even) {
+	background-color: lightgrey;
+}
+
+h1 {
+	margin: auto;
+	text-align: center;
+}
+
+h2 {
+	margin: auto;
+	text-align: center;
+	padding: 20px;
+}
+
+span{
+	padding: 5px 0 5px 0;
+	min-width: 20vw;
+	display: block;
 }

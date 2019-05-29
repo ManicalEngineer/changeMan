@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+{% if user.is_authenticated %}
 <link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
 <h1>Active ECR List</h1>
 <h2>Open ECRs</h2>
@@ -82,5 +83,9 @@
       <h2>No On Hold ECRs</h2>
     {% endif %}
   <script src="{% static "javascript/ecr_list.js" %}"></script>
+
+{% else %}
+  {% include 'redirect.html' %}
+{% endif %}
 
 {% endblock %}

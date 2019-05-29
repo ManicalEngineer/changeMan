@@ -8,10 +8,22 @@
       {{ form.media }}
       <!-- {{ form.as_p }} -->
       {{ form.non_field_errors }}
-      <div class="fieldWrapper">
-        {{ form.ecr_title.errors }}
-        <label id="titleLBL" for="{{ form.ecr_title.id_for_label }}">ECR Title</label>
-        {{ form.ecr_title }}
+      <div id="top">
+        <div class="fieldWrapper">
+          {{ form.ecr_title.errors }}
+          <label id="titleLBL" for="{{ form.ecr_title.id_for_label }}">ECR Title</label>
+          {{ form.ecr_title }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.status.errors }}
+          <label for="{{ form.status.id_for_label }}">Status</label>
+          {{ form.status }}
+        </div>
+        <div class="fieldWrapper">
+          {{ form.ecr_disposition.errors }}
+          <label for="{{ form.ecr_disposition.id_for_label }}">Disposition</label>
+          {{ form.ecr_disposition }}
+        </div>
       </div>
 
       <div class="fieldWrapper" id="parts">
@@ -68,10 +80,6 @@
     </form>
     <script type="text/javascript" src="{% static "javascript/rules.js" %}"></script>
   {% else %}
-    <h1>You must be logged in to add or edit ECRs</h1>
-    <script>
-      window.location = "/access/login/";
-    </script>
-    <a href="/access/login/">Log In</a>
+    {% include 'redirect.html' %}>
   {% endif %}
 {% endblock %}

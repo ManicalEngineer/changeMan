@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
 from datetime import datetime
 from datetime import timedelta
 
-from .models import ECO, ECR
+from .models import ECO, ECR, Revision
 from parts.models import Part
 from .forms import AddECRForm, AddECOForm, CreateRevision
 
@@ -41,14 +43,17 @@ def ecr_add(request):
             ecr = form.save(commit=False)
             ecr.initiated_by = request.user
 
-            if ecr.priority == '1':
-                ecr.deadline = ecr.create_date + timedelta(weeks=1)
-            elif ecr.priority == '2':
-                ecr.deadline = ecr.create_date + timedelta(weeks=2)
-            else:
-                ecr.deadline = ecr.create_date + timedelta(months=3)
+            # if ecr.priority == '1':
+            #     ecr.deadline = ecr.create_date + timedelta(weeks=1)
+            # elif ecr.priority == '2':
+            #     ecr.deadline = ecr.create_date + timedelta(weeks=2)
+            # else:
+            #     ecr.deadline = ecr.create_date + timedelta(months=3)
 
             ecr = form.save()
+
+            #send_mail('Test', 'ECR Created', settings.EMAIL_HOST_USER, ['unhfireboy@yahoo.com'], fail_silently=False)
+
             return redirect('ecr_detail', ecr_number=ecr.ECR_number)
     else:
         form = AddECRForm()
@@ -96,19 +101,6 @@ def ecr_edit(request, ecr_number):
                 ecr = form.save()
                 return redirect('ecr_detail', ecr_number=ecr.ECR_number)
     else:
-        # data = {'ecr_title': ecr.ecr_title,
-        #         'parts': ecr.part_numbers.all(),
-        #         'requested_change': ecr.requested_change,
-        #         'proposed_solution': ecr.solution,
-        #         'requirements': ecr.requirements,
-        #         'impact': ecr.impact,
-        #         'steps': ecr.steps,
-        #         'remediation': ecr.remediation,
-        #         'notes': ecr.notes,
-        #         'status': ecr.status,
-        #         'disposition': ecr.ecr_disposition,
-        #         }
-
         form = AddECRForm(instance=ecr)
     return render(request, "changes/add_ecr.html", {'form': form})
 
@@ -120,10 +112,8 @@ def eco_add(request):
             eco = form.save(commit=False)
             eco.initiated_by = request.user
             eco = form.save()
-
     else:
         form = AddECOForm()
-
     return render(request, 'changes/add_eco.html', {'form': form})
 
 
@@ -134,10 +124,8 @@ def eco_edit(request, eco_number):
         if form.is_valid():
             eco = form.save(commit=False)
             eco.initiated_by = request.user
-
             eco = form.save()
             return redirect('eco_detail', eco_number=eco.ECO_number)
-
     else:
         form = AddECOForm(instance=eco)
     return render(request, "changes/add_eco.html", {'form': form})
@@ -146,7 +134,14 @@ def eco_edit(request, eco_number):
 def eco_detail(request, eco_number):
     eco = get_object_or_404(ECO, pk=eco_number)
     mf = ECO._meta.get_fields()
-    return render(request, 'changes/eco_detail.html', {'eco': eco, 'mf': mf})
+
+    part_revs = {}
+
+    for pn in eco.part_numbers.all():
+        rev = Revision.objects.filter(revised_drawing__exact=pn).order_by('-revision_level')
+        part_revs.update({pn:rev[0]})
+
+    return render(request, 'changes/eco_detail.html', {'eco': eco, 'revs': part_revs})
 
 
 def eco_list(request):
@@ -158,13 +153,18 @@ def eco_list(request):
     return render(request, 'changes/eco_list.html', {'op_ecos': op_ecos, 'ip_ecos': ip_ecos, 'oh_ecos': oh_ecos, 'cr_ecos': cr_ecos})
 
 
-def revise_drawing(request, drawing_number):
+def revise_drawing(request, drawing_number, eco_number):
     if request.method == "POST":
         form = CreateRevision(request.POST)
         if form.is_valid():
             rev = form.save()
     else:
-        form = CreateRevision()
+
+        last_rev = Revision.objects.filter(revised_drawing__exact=drawing_number).order_by('-revision_level')[0]
+        new_rev = chr(ord(last_rev.revision_level) + 1)
+        form = CreateRevision(initial={'revised_drawing': drawing_number,
+                                        'revision_level': new_rev,
+                                        'ECO_number': eco_number})
 
     return render(request, 'changes/add_rev.html', {'form': form})
 
