@@ -12,7 +12,7 @@ class AddECRForm(forms.ModelForm):
         model = ECR
         fields = ('ecr_title', 'part_numbers', 'requested_change',
                   'solution', 'requirements', 'impact', 'steps', 'remediation', 'notes', 'status',
-                  'ecr_disposition'
+                  'ecr_disposition', 'engineer'
                   )
         widgets = {
             'part_numbers': FilteredSelectMultiple(Part, is_stacked=True),

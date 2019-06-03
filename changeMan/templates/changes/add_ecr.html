@@ -15,6 +15,11 @@
           {{ form.ecr_title }}
         </div>
         <div class="fieldWrapper">
+          {{ form.engineer.errors }}
+          <label id="engineerLBL" for="{{ form.engineer.id_for_label }}">Assigned Engineer</label>
+          {{ form.engineer }}
+        </div>
+        <div class="fieldWrapper">
           {{ form.status.errors }}
           <label for="{{ form.status.id_for_label }}">Status</label>
           {{ form.status }}

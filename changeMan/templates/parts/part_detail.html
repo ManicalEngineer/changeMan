@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
 {% load static %}
 <link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
 <style>
@@ -58,4 +59,8 @@
       {% endfor %}
     </table>
   </body>
+
+    {% else %}
+    {% include 'redirect.html' %}
+  {% endif %}
 {% endblock %}

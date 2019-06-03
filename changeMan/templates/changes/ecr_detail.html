@@ -5,7 +5,8 @@
 <link rel="stylesheet" href= "{% static "css/detail.css" %}">
     <h1>ECR{{ ecr.ECR_number }}: {{ ecr.ecr_title }}  -  {{ ecr.status }}</h1>
     Created on: {{ ecr.create_date }}<br>
-    By: {{ ecr.initiated_by.last_name }}, {{ ecr.initiated_by.first_name }}
+    By: {{ ecr.initiated_by.last_name }}, {{ ecr.initiated_by.first_name }} <br>
+    Assigned to: {{ ecr.engineer }}
     <div class="title">
       <h2>Affected Parts</h2>
       <div class="data">
@@ -19,12 +20,6 @@
       <h2>Idenified Problem or Improvements</h2>
       <div class="data">
         {{ ecr.requested_change }}<br>
-      </div>
-    </div>
-    <div class="title">
-      <h2>Change or Improvements Justification</h2>
-      <div class="data">
-        {{ ecr.justification }}
       </div>
     </div>
     <div class="title">

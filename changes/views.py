@@ -15,8 +15,8 @@ from .forms import AddECRForm, AddECOForm, CreateRevision
 
 def dashboard(request):
     if request.user.is_authenticated:
-        ecrs = ECR.objects.filter(engineer__exact=request.user)
-        ecos = ECO.objects.filter(engineer__exact=request.user)
+        ecrs = ECR.objects.filter(engineer__exact=request.user).exclude(status__exact="CL")
+        ecos = ECO.objects.filter(engineer__exact=request.user).exclude(oa_status__exact="CL")
         parts = Part.objects.filter(initiated_by__exact=request.user)
         return render(request, 'changes/dashboard.html', {'ecrs': ecrs, 'ecos': ecos, 'parts': parts})
     else:
