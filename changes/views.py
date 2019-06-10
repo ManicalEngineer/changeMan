@@ -17,8 +17,8 @@ def dashboard(request):
     if request.user.is_authenticated:
         ecrs = ECR.objects.filter(engineer__exact=request.user)
         ecos = ECO.objects.filter(engineer__exact=request.user)
-        parts = Part.objects.filter(initiated_by__exact=request.user)
-        return render(request, 'changes/dashboard.html', {'ecrs': ecrs, 'ecos': ecos, 'parts': parts})
+        #parts = Part.objects.filter(initiated_by__exact=request.user)
+        return render(request, 'changes/dashboard.html', {'ecrs': ecrs, 'ecos': ecos})
     else:
         return render(request, 'redirect.html')
 
@@ -135,13 +135,13 @@ def eco_detail(request, eco_number):
     eco = get_object_or_404(ECO, pk=eco_number)
     mf = ECO._meta.get_fields()
 
-    part_revs = {}
+    #part_revs = {}
 
-    for pn in eco.part_numbers.all():
-        rev = Revision.objects.filter(revised_drawing__exact=pn).order_by('-revision_level')
-        part_revs.update({pn:rev[0]})
+    # for pn in eco.part_numbers.all():
+    #rev = Revision.objects.filter(revised_drawing__exact=pn).order_by('-revision_level')
+    #part_revs.update({pn: rev[0]})
 
-    return render(request, 'changes/eco_detail.html', {'eco': eco, 'revs': part_revs})
+    return render(request, 'changes/eco_detail.html', {'eco': eco})
 
 
 def eco_list(request):
@@ -158,13 +158,19 @@ def revise_drawing(request, drawing_number, eco_number):
         form = CreateRevision(request.POST)
         if form.is_valid():
             rev = form.save()
+        return redirect('part_summary', part_number=drawing_number)
     else:
 
-        last_rev = Revision.objects.filter(revised_drawing__exact=drawing_number).order_by('-revision_level')[0]
-        new_rev = chr(ord(last_rev.revision_level) + 1)
+        revs = Revision.objects.filter(revised_drawing__exact=drawing_number).order_by('-revision_level')
+        if len(revs) > 0:
+            last_rev = revs[0]
+            new_rev = chr(ord(last_rev.revision_level) + 1)
+        else:
+            new_rev = "A"
+
         form = CreateRevision(initial={'revised_drawing': drawing_number,
-                                        'revision_level': new_rev,
-                                        'ECO_number': eco_number})
+                                       'revision_level': new_rev,
+                                       'ECO_number': eco_number})
 
     return render(request, 'changes/add_rev.html', {'form': form})
 

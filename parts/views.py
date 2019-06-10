@@ -7,6 +7,8 @@ from changes.models import Revision, ECO, ECR
 from .forms import AddPartForm
 
 # Create your views here.
+
+
 def add_part(request):
 
     if request.method == "POST":
@@ -15,13 +17,6 @@ def add_part(request):
             part = form.save(commit=False)
             part.initiated_by = request.user
             part = form.save()
-            if part.has_drawing:
-                rev = Revision()
-                rev.revision_level = "A"
-                rev.revised_drawing = part
-                rev.description = "Created Part"
-                rev.save()
-
             return redirect('part_summary', part_number=part.part_number)
     else:
         form = AddPartForm()
@@ -34,4 +29,4 @@ def part(request, part_number):
     revs = Revision.objects.filter(revised_drawing=str(part_number))
     ecos = ECO.objects.filter(part_numbers=str(part_number))
     ecrs = ECR.objects.filter(part_numbers=str(part_number))
-    return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecos': ecos, 'ecrs':ecrs})
+    return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecos': ecos, 'ecrs': ecrs})
