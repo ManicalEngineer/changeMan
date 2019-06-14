@@ -34,14 +34,14 @@ class ECR(models.Model):
     initiated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     engineer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ECR", blank=True, null=True)
     ECR_number = models.AutoField(primary_key=True, verbose_name="ECR Number")
-    part_numbers = models.ManyToManyField("parts.Part", verbose_name="Affected Part Numbers")
-    requested_change = models.CharField(max_length=300, verbose_name="Requested Change or Improvement")
+    part_numbers = models.ManyToManyField("parts.Part", verbose_name="Affected Part Numbers", blank=True, null=True)
+    requested_change = models.CharField(max_length=300, verbose_name="Requested Change or Improvement", default='N/A', blank=True, null=True)
 
-    solution = models.CharField(max_length=300, verbose_name="Solution & Cost")
-    requirements = models.CharField(max_length=300)
-    impact = models.CharField(max_length=300)
-    steps = models.CharField(max_length=300)
-    remediation = models.CharField(max_length=300)
+    solution = models.CharField(max_length=300, verbose_name="Solution & Cost", default='N/A', blank=True, null=True)
+    requirements = models.CharField(max_length=300, default='N/A', blank=True, null=True)
+    impact = models.CharField(max_length=300, default='N/A', blank=True, null=True)
+    steps = models.CharField(max_length=300, default='N/A', blank=True, null=True)
+    remediation = models.CharField(max_length=300, default='N/A', blank=True, null=True)
     notes = models.CharField(max_length=300, blank=True, null=True)
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='IP')
     ecr_disposition = models.CharField(max_length=3, choices=DISPO_CHOICES, null=True, blank=True)
@@ -110,7 +110,7 @@ class ECO(models.Model):
     patterns_status = models.CharField(max_length=20, choices=ITEM_STATUS_CHOICES, blank=True, null=True)
     patterns_notes = models.CharField(max_length=300, blank=True, null=True)
     completed_date = models.DateField(blank=True, null=True)
-    eng_sign = models.CharField(max_length=30,  blank=True, null=True)
+    eng_sign = models.CharField(max_length=30, blank=True, null=True)
     oa_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="Created")
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='1')
 
@@ -125,5 +125,6 @@ class Revision(models.Model):
     description = models.CharField(max_length=100, verbose_name="Change Description")
     ECO_number = models.ForeignKey('ECO', on_delete=models.CASCADE, verbose_name="Related ECO Number", null=True, blank=True)
 
-    # def __str__(self):
-#    return str(self.revised_drawing) + " Revision " + str(self.revision_level)
+    def __str__(self):
+        rtn_str = self.revised_drawing.part_number + " Revision " + self.revision_level
+        return rtn_str

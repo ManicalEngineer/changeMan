@@ -13,7 +13,7 @@
   }
 </style>
   <body>
-    <h1>{{ part.part_number }} - {{ part.part_description }}</h1>
+    <h1 id="heading">{{ part.part_number }} - {{ part.part_description }}</h1>
     <span id="by-line">Created By: {{ part.initiated_by.last_name }}, {{ part.initiated_by.first_name }} on {{ part.create_date }}</span>
     <h2>Revisions</h2>
     <table>
@@ -58,6 +58,13 @@
       </tr>
       {% endfor %}
     </table>
+    <script>
+      var refer = document.referrer;
+      var header = document.getElementsByTagName("h1")[0]
+      if (refer.includes("add")){
+        header.innerHTML += " added sucessfully!";
+      };
+    </script>
   </body>
 
     {% else %}
