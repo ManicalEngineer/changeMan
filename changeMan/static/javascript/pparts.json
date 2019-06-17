@@ -1,20 +1,25 @@
-["601", {
-	"Rod T Seals": "000",
-	"Piston T Seals": "010",
-	"Rod Wipers": "020",
-	"O-Ring Seals": "030",
-	"Rod Plypak": "040",
-	"Piston Polypak": "050",
-	"Back-up Rings": "060",
-	"Piston & Rod Wear Rings": "070",
-	"Seal Kits": "080",
-	"Special Seals": "090",
-	"Electrial Motor Starters": "100",
-	"Switches, Push Buttons & Accessories": "110"
-
+[
+{"601":
+   {
+      "Rod T Seals":"000",
+      "Piston T Seals":"010",
+      "Rod Wipers":"020",
+      "O-Ring Seals":"030",
+      "Rod Plypak":"040",
+      "Piston Polypak":"050",
+      "Back-up Rings":"060",
+      "Piston & Rod Wear Rings":"070",
+      "Seal Kits":"080",
+      "Special Seals":"090",
+      "Electrial Motor Starters":"100",
+      "Switches, Push Buttons & Accessories":"110"
+   }
 },
 
-"600", {
-	"Testing": "000"
+{"600":
+   {
+      "Testing":"000",
+      "Another Test": "010"
+   }
 }
 ]

@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('access/', include('django.contrib.auth.urls') ),
     path('dashboard/', cViews.dashboard, name="dashboard"),
+    path('parts/spRequest/', views.get_last, name="SPR"),
     path('parts/add/', views.add_part, name="add_part"),
     path('parts/<str:part_number>/', views.part, name="part_summary"),
     path('ecr/<int:ecr_number>/', cViews.ecr_detail, name="ecr_detail"),
@@ -34,5 +35,5 @@ urlpatterns = [
     path('eco/<int:eco_number>/', cViews.eco_detail, name="eco_detail"),
     path('eco/list/', cViews.eco_list, name="eco_list"),
     path('rev/add/<str:drawing_number>/<int:eco_number>/', cViews.revise_drawing, name="add_rev"),
-    path('performance/', cViews.performance, name="performance")
+    path('performance/', cViews.performance, name="performance"),
 ]

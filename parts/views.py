@@ -30,3 +30,10 @@ def part(request, part_number):
     ecos = ECO.objects.filter(part_numbers=str(part_number))
     ecrs = ECR.objects.filter(part_numbers=str(part_number))
     return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecos': ecos, 'ecrs': ecrs})
+
+def get_last(request):
+    partial_pn = request.POST.get("part_number","")
+    print(partial_pn)
+    part = Part.objects.filter(part_number__contains="601-000").last().part_number
+    print(part)
+    return HttpResponse(part)
