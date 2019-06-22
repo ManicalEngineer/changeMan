@@ -34,16 +34,29 @@ def part(request, part_number):
 def get_last(request):
     partial_pn = request.POST.get("part_number","")
     
-    print(partial_pn)
-    
-    part = Part.objects.filter(part_number__contains="601-000").last().part_number
-    
-    last_three = part[-3:].lstrip('0')
+    p = Part.objects.filter(part_number__contains=partial_pn).last()
 
-    #last
+    if p is not None:
+        
+        part = p.part_number
 
-    part = part[:8] + str(int(last_three) + 1)
+        if part[-3:] != '000':
+            
+            last_three = part[-3:].lstrip('0')
 
-    print(part)
+            last_three = str(int(last_three) + 1)
+
+        else:
+            
+            last_three = "1"
+
+        while len(last_three) < 3:
+            last_three = "0" + last_three
+
+        part = part[:8] + last_three
+
+    else:
+
+        part = partial_pn + "-000"
 
     return HttpResponse(part)
