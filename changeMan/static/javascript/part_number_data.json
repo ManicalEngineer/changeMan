@@ -8,6 +8,7 @@
 		"Raw-Material",
 		"Purchased-Parts"
 	],
+
 	"Two-Post": [
 		["012", "12,000 lbs"], 
 		["016", "16,000 lbs"], 
@@ -31,16 +32,17 @@
 		["033", "33,000 lbs"]],
 
 	"Mobile-Post": [
-		["MP-0000", "Lift"],
-		["MP-1300", "Accessory - 1300"],
-		["MP-2100", "Accessory - 2100"],
-		["MP-2200", "Accessory - 2200"],
-		["MP-2300", "Accessory - 2300"],
-		["MP-2400", "Accessory - 2400"],
-		["MP-2500", "Accessory - 2500"],
-		["MP-2600", "Accessory - 2600"],
-		["MP-2900", "Accessory - 2900"]
+		["MP-0000", "Final Assembiles"],
+		["MP-0100", "Illustration, Spec Drawings, Manual"],
+		["MP-0200", "Packing Assembiles"],
+		["MP-0300", "Tag & Decals"],
+		["MP-0400", "Post Assembiles"],
+		["MP-0500", "Foot Roller Assembly"],
+		["MP-0600", "Lock Assembly"],
+		["MP-0700", "Carriage Assembly"],
+		["MP-1200", "Hose Assembiles"]
 		],
+
 	"Mobile-Post-Type":[
 		["A", "Assembly"],
 		["P", "Part"],
@@ -48,9 +50,9 @@
 		],
 
 	"Paralleogram": [
-		["P-000", "Lift"],
-		["P-100", "Accessory - 100"],
-		["P-200", "Accessory - 200"]
+		["P-000", "Final Assemblies"],
+		["P-800", "Lift Options"],
+		["P-500", "Jack Beam Drawings"]
 		],
 
 	"Paralleogram-Type": [

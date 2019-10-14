@@ -31,32 +31,33 @@ def part(request, part_number):
     ecrs = ECR.objects.filter(part_numbers=str(part_number))
     return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecos': ecos, 'ecrs': ecrs})
 
+
 def get_last(request):
-    partial_pn = request.POST.get("part_number","")
-    
+    partial_pn = request.POST.get("part_number", "")
+
     p = Part.objects.filter(part_number__contains=partial_pn).last()
 
     if p is not None:
-        
-        part = p.part_number
 
+        part = p.part_number
+        print(part)
         if part[-3:] != '000':
-            
+
             last_three = part[-3:].lstrip('0')
 
             last_three = str(int(last_three) + 1)
 
         else:
-            
+
             last_three = "1"
 
         while len(last_three) < 3:
             last_three = "0" + last_three
 
-        part = part[:8] + last_three
+        part = partial_pn + last_three
 
     else:
 
-        part = partial_pn + "-000"
+        part = partial_pn + "000"
 
     return HttpResponse(part)
