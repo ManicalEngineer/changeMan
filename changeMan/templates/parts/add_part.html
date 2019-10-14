@@ -1,132 +1,89 @@
-
 {% extends 'base.html' %}
 {% block content %}
 {% if user.is_authenticated %}
 {% load static %}
 
-  <style>
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
-    }
+<body>
+	<label for="part-type">Part Type: </label>
+		<select id="part-type">
+		</select><br>
+	<label for="pn-start">Part Number Family: </label>
+		<select id="pn-start">
+		</select><br>
+	<label for="pn-mid">Part Number Sub-Type</label>
+		<select id="pn-mid">
+		</select><br>
 
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-  </style>
-  <body>
-    <div id="part-number-modal" class="modal">
-      <div class="modal-content">
-        <select id="600">
-        </select>
-        <select id="601">
-        </select>
-        <button id="get_part" type="button">Get Part Number</button>
-      </div>
-    </div>
-    <form id="PN" action="" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Add Part</button>
-    </form>
-  </body>
-  <script type="text/javascript">
-    var modal = document.getElementById("part-number-modal");
-    var pn_input = document.getElementsByName("part_number")[0];
-    var select_601 = document.getElementById("601");
-    var select_600 = document.getElementById("600");
-    var url = "{{ STATIC_URL }} /static/javascript/pparts.json";
-    var request = new XMLHttpRequest();
-    var btn = document.getElementById("get_part");
+	<p id="cap"></p>
 
-    request.open('GET', url);
-    request.responseType = 'text/json';
-    request.onload = function() {
-      var raw_json = request.response;
-      var plist = JSON.parse(raw_json);
-      var list_601 = Object.keys(plist[0]["601"]);
-      var list_600 = Object.keys(plist[1]["600"]);
+</body>
+<script>
+		var pnType = document.getElementById("part-type");
+		var request = new XMLHttpRequest();
+		var pnCap = document.getElementById("pn-start");
+		var pnMid = document.getElementById("pn-mid");
+		//var pnSeq = document.getElementById("pn-seq");
+		var capTxt = document.getElementById("cap")
+		//var liftData
 
-      for (var i = 0; i < list_601.length; i++){
-        var optionElm = document.createElement('option');
-        var optTxt = document.createTextNode(list_601[i]);
-        optionElm.setAttribute('value', plist[0]["601"][list_601[i]]);
-        optionElm.appendChild(optTxt);
-        select_601.appendChild(optionElm);
-      }
 
-      for (var j = 0; j < list_600.length; j++){
-        var optionEl = document.createElement('option');
-        var optTxt = document.createTextNode(list_600[j]);
-        optionEl.setAttribute('value', plist[1]["600"][list_600[j]]);
-        optionEl.appendChild(optTxt);
-        select_600.appendChild(optionEl);
-      }
+		function addOption(optValue, optTxt, selectElem){
+			var option = document.createElement("option");
+			var optionTxt = document.createTextNode(optTxt);
+			option.appendChild(optionTxt);
+			option.value = optValue;
+			selectElem.appendChild(option);
 
-      
-    };
-    request.send();
+		}
 
-    pn_input.oninput = function () {
-      if (pn_input.value.startsWith("600") || pn_input.value.startsWith("601")) {
-        modal.style.display = "block";
-        if (pn_input.value.startsWith("601")) {
-          select_601.style.display = "block";
-          select_600.style.display = "none";
-        } else {
-          select_601.style.display = "none";
-          select_600.style.display = "block";
-        }
-      } else {
-        modal.style.display = "none";
-      }
-    }
+		function updatePNText(){
+			var first = pnCap.options[pnCap.selectedIndex].value
+			var mid = pnMid.options[pnMid.selectedIndex].value
+			capTxt.innerHTML = '';
+			capTxt.innerHTML = first + '-' + mid + '-'
+		}
+		
+		request.onload = function () {
+			if (request.status >= 200 && request.status < 300){
+				var liftData = JSON.parse(request.responseText);
+				for(let i = 0; i < liftData.Lifts.length; i++){
+					addOption(liftData.Lifts[i], liftData.Lifts[i], pnType);
+				}
 
-    var get_pn = function (){
-      var pnRequest =  new XMLHttpRequest();
-      var FD = new FormData(document.getElementById('PN'));
+				pnType.onchange = function () {
+					var data = pnType.options[pnType.selectedIndex].text;
+					pnCap.options.length = 0;
+					pnMid.options.length = 0;
+					for(let j = 0; j < liftData[data].length; j++){
+						addOption(liftData[data][j][0], liftData[data][j][1], pnCap);
+					}
 
-      pnRequest.addEventListener('load', function(event){
-        pn_input.value = pnRequest.response;
-      });
+					for(let k = 0; k < liftData[data + "-Type"].length; k++){
+						addOption(liftData[data + "-Type"][k][0], liftData[data + "-Type"][k][1], pnMid)
+					}
 
-      pnRequest.addEventListener('error', function(event){
-        alert('Unknown Error');
-      });
+					updatePNText()
+				}
 
-      pnRequest.open('POST', '/parts/spRequest/');
-      pnRequest.send(FD);
-    }
+				pnCap.onchange = function() {
+					updatePNText();
+				}
 
-    btn.onclick = function () {
-      if (pn_input.value.startsWith("600")){
-        pn_input.value = pn_input.value + "-" + select_600.value
-        modal.style.display = "none";
-        get_pn();
-      } else if (pn_input.value.startsWith("601")){
-        pn_input.value = pn_input.value + "-" + select_601.value
-        modal.style.display = "none";
-        get_pn();
-      }
-    }
+				pnMid.onchange = function() {
+					updatePNText()
+				}
 
-    // window.onclick = function() {
-    //   modal.style.display = "none";
-    // }
+			}
+			
+		
+		}
 
-  </script>
+
+		request.open("GET", "http://localhost:8000/static/javascript/part_number_data.json");
+		request.send();
+
+</script>
+
  {% else %}
   {% include 'redirect.html' %}
  {% endif %}

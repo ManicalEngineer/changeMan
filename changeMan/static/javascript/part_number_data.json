@@ -1,0 +1,83 @@
+{
+"Lifts":
+	[
+		"Two-Post",
+		"Four-Post",
+		"Mobile-Post",
+		"Paralleogram",
+		"Raw-Material",
+		"Purchased-Parts"
+	],
+	"Two-Post": [
+		["012", "12,000 lbs"], 
+		["016", "16,000 lbs"], 
+		["018", "18,000 lbs"]],
+
+	"Two-Post-Type": [
+		["010", "010"],
+		["020", "020"],
+		["030", "030"]
+		],
+
+	"Four-Post-Type": [
+		["010", "010"],
+		["020", "020"],
+		["030", "030"]
+		],
+
+	"Four-Post": [
+		["019", "19,000 lbs"],
+		["025", "25,000 lbs"],
+		["033", "33,000 lbs"]],
+
+	"Mobile-Post": [
+		["MP-0000", "Lift"],
+		["MP-1300", "Accessory - 1300"],
+		["MP-2100", "Accessory - 2100"],
+		["MP-2200", "Accessory - 2200"],
+		["MP-2300", "Accessory - 2300"],
+		["MP-2400", "Accessory - 2400"],
+		["MP-2500", "Accessory - 2500"],
+		["MP-2600", "Accessory - 2600"],
+		["MP-2900", "Accessory - 2900"]
+		],
+	"Mobile-Post-Type":[
+		["A", "Assembly"],
+		["P", "Part"],
+		["W", "Weldment"]
+		],
+
+	"Paralleogram": [
+		["P-000", "Lift"],
+		["P-100", "Accessory - 100"],
+		["P-200", "Accessory - 200"]
+		],
+
+	"Paralleogram-Type": [
+		["A", "Assembly"],
+		["P", "Part"],
+		["W", "Weldment"]
+		],
+
+	"Raw-Material": [["600", "600"]],
+
+	"Purchased-Parts": [["601", "601"]],
+
+	"Raw-Material-Type": [
+		["010", "Flats"],
+		["020", "Rounds"]
+		],
+
+	"Purchased-Parts-Type" : [
+		["000", "Rod T Seals"],
+		["010", "Piston T Seals"],
+		["020", "Rod Wipers"],
+		["030", "O-Ring Seals"],
+		["040", "Rod Plypak"],
+		["050", "Piston Plypack"],
+		["060", "Back-up Rings"],
+		["070", "Piston & Rod Wear Rings"],
+		["080", "Seal Kits"],
+		["090", "Special Seals"]
+		]
+}
