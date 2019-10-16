@@ -40,7 +40,7 @@ def get_last(request):
     if p is not None:
 
         part = p.part_number
-        print(part)
+
         if part[-3:] != '000':
 
             last_three = part[-3:].lstrip('0')
@@ -55,6 +55,8 @@ def get_last(request):
             last_three = "0" + last_three
 
         part = partial_pn + last_three
+        print(partial_pn)
+        print(part)
 
     else:
 

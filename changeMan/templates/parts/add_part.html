@@ -2,27 +2,45 @@
 {% block content %}
 {% if user.is_authenticated %}
 {% load static %}
+<style>
+	#content {
+		position: relative;
+		top: 5vh;
+		margin: auto;
+		padding: 20px;
+		width: 25%;
+		box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		border-radius: 25px;
+		background-color: grey;
+	}
 
+	select {
+		margin: 5px;
+	}
+</style>
 <body>
-	<label for="part-type">Part Type: </label>
-		<select id="part-type">
-		</select><br>
-	<label for="pn-start">Part Number Family: </label>
-		<select id="pn-start">
-		</select><br>
-	<label for="pn-mid">Part Number Sub-Type</label>
-		<select id="pn-mid">
-		</select><br>
+	<div id="content">
+		<label for="part-type">Part Type: </label>
+			<select id="part-type">
+			</select><br>
+		<label for="pn-start">Part Number Family: </label>
+			<select id="pn-start">
+			</select><br>
+		<label for="pn-mid">Part Number Sub-Type</label>
+			<select id="pn-mid">
+			</select><br>
+		<button id="btn-next-pn">Get Next Part Number</button>	
+		<p id="cap"></p>
 
-	<p id="cap"></p>
 
-	<form id="part-number-frm" method="POST">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Add Part</button>
-	</form>
+		<form id="part-number-frm" method="POST">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit">Add Part</button>
+		</form>
 
-	<button id="btn-next-pn">Get Next Part Number</button>
+		
+	</div>
 
 </body>
 <script>
@@ -32,8 +50,12 @@
 		var pnMid = document.getElementById("pn-mid");
 		var btnGet = document.getElementById("btn-next-pn");
 		var capTxt = document.getElementById("cap");
+		var pn_desc = document.getElementById("id_part_description");
+		var pn_box = document.getElementById("id_part_number");
+		var form = document.getElementById("part-number-frm");
+		form.elements[3].disabled = true;
 
-		document.getElementById("id_part_number").disabled = true;
+		document.getElementById("id_part_number").setAttribute("readonly", "readonly");
 
 
 		function addOption(optValue, optTxt, selectElem){
@@ -87,16 +109,19 @@
 						addOption(liftData[data + "-Type"][k][0], liftData[data + "-Type"][k][1], pnMid)
 					}
 
-					updatePNText()
+					updatePNText();
+					checkPN();
 				}
 
 
 				pnCap.onchange = function() {
 					updatePNText();
+					checkPN();
 				}
 
 				pnMid.onchange = function() {
 					updatePNText()
+					checkPN();
 				}
 
 			}
@@ -117,10 +142,18 @@
 
 			part_request.onload = function(){
 				var pn_txt = document.getElementById("id_part_number");
-				capTxt.innerHTML = "";
-				capTxt.innerHTML = part_request.response;
-				pn_txt.value = "";
-				pn_txt.value = part_request.response;
+
+				var pnArray = part_request.response.split("-");
+				var pnEnd = pnArray[pnArray.length - 1];
+				if(pnEnd.length < 4){
+					capTxt.innerHTML = "";
+					capTxt.innerHTML = part_request.response;
+					pn_txt.value = "";
+					pn_txt.value = part_request.response;
+					checkPN();
+				}else{
+					window.alert(cap.innerHTML + " series has reached its maximum, please select different series")
+				}
 				//console.log(part_request.response);
 			}
 
@@ -132,9 +165,23 @@
 			part_request.send(FD);
 		}
 
+		 function checkPN() {
+			var reMobile = new RegExp("MP\\-\\d{4,4}\\-[A,W,P]\\-\\d{3,3}", "g");
+			var rePara = new RegExp("P\\-\\d{3,4}\\-[A,W,P]\\-\\d{3,3}", "g");
+			var reGeneral = new RegExp("\\d{3,3}\\-\\d{3,3}\\-\\d{3,3}", "g");
+			var form = document.getElementById("part-number-frm");
+			
+			console.log("in Check PN");
+			var result = reMobile.test(capTxt.innerHTML) || rePara.test(capTxt.innerHTML) || reGeneral.test(capTxt.innerHTML);
+			form.elements[3].disabled = !result;
+		};
+
 </script>
 
  {% else %}
   {% include 'redirect.html' %}
  {% endif %}
 {% endblock %}
+
+
+
