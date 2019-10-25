@@ -21,7 +21,7 @@ from changes import views as cViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('access/', include('django.contrib.auth.urls') ),
+    path('access/', include('django.contrib.auth.urls')),
     path('dashboard/', cViews.dashboard, name="dashboard"),
     path('parts/spRequest/', views.get_last, name="SPR"),
     path('parts/add/', views.add_part, name="add_part"),
@@ -36,4 +36,5 @@ urlpatterns = [
     path('eco/list/', cViews.eco_list, name="eco_list"),
     path('rev/add/<str:drawing_number>/<int:eco_number>/', cViews.revise_drawing, name="add_rev"),
     path('performance/', cViews.performance, name="performance"),
+    path('parts/util/add_series/', views.updateSeries, name="update_series"),
 ]

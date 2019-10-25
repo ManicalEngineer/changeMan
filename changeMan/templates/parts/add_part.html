@@ -53,7 +53,7 @@
 		var pn_desc = document.getElementById("id_part_description");
 		var pn_box = document.getElementById("id_part_number");
 		var form = document.getElementById("part-number-frm");
-		form.elements[3].disabled = true;
+		form.elements[6].disabled = true;
 
 		document.getElementById("id_part_number").setAttribute("readonly", "readonly");
 
@@ -173,7 +173,26 @@
 			
 			console.log("in Check PN");
 			var result = reMobile.test(capTxt.innerHTML) || rePara.test(capTxt.innerHTML) || reGeneral.test(capTxt.innerHTML);
-			form.elements[3].disabled = !result;
+			form.elements[6].disabled = !result;
+		};
+
+		function checkDesc(){
+			var desc = document.getElementById("id_part_description").value;
+			var reDesc = new RegExp(".{0,}[\\?!]{1,}", "g");
+			var result = reDesc.test(desc);
+			form.elements[6].disabled = result;
+			if(result){
+				alert("Descriptions cannot contain '?' or '!'");
+			};
+			console.log("in here");
+			console.log(desc);
+			console.log(result);
+		};
+
+		var input_Desc = document.getElementById("id_part_description");
+		input_Desc.onchange = function(){
+			checkDesc();
+
 		};
 
 </script>

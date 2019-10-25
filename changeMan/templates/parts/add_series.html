@@ -1,0 +1,45 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+    	<table id="series-table">
+    		<tr>
+    			<td>Part Series Type: </td>
+    			<td><input type="text"></td>
+    		</tr>
+    		<tr>
+    			<td>Part Series Pre-fix:Value</td>
+    			<td><input type="text" class="pre-fix"></td>
+    			<td><input type="text" class="value"></td>
+    		</tr>
+    	</table>
+    	<button id="addBtn">Add Row</button>
+    </body>
+  
+        <script>
+        	var table = document.getElementById("series-table");
+        	var btn = document.getElementById("addBtn");
+        	
+
+        	btn.onclick = function(){
+        		var row = table.insertRow(-1);
+	        	var preCell = row.insertCell(0);
+	        	var vluCell = row.insertCell(1);
+
+	        	preCell.innerHTML('<input type="text" class="pre-fix">');
+	        	vluCell.innerHTML('<input type="text" class="value">');
+        	};
+
+        	
+
+
+
+        </script>
+        
+</html>

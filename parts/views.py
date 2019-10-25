@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.templatetags.static import static
 
 from .models import Part
 from changes.models import Revision, ECO, ECR
 from .forms import AddPartForm
+
+import json
 
 # Create your views here.
 
@@ -63,3 +66,11 @@ def get_last(request):
         part = partial_pn + "000"
 
     return HttpResponse(part)
+
+
+def updateSeries(request):
+    f = open('C:\\Users\\sbicknell\\Documents\\Python Scripts\\Django\\changeMan\\changeMan\\static\\javascript\\part_number_data.json', 'r')
+    pn_series = json.load(f)
+    print(pn_series)
+
+    return HttpResponse(pn_series)
