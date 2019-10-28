@@ -68,6 +68,11 @@ def get_last(request):
     return HttpResponse(part)
 
 
+def part_list(request):
+    parts = Part.objects.all()
+    return render(request, 'parts/part_list.html', {'parts': parts})
+
+
 def updateSeries(request):
     f = open('C:\\Users\\sbicknell\\Documents\\Python Scripts\\Django\\changeMan\\changeMan\\static\\javascript\\part_number_data.json', 'r')
     pn_series = json.load(f)

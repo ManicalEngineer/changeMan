@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+{% load static %}
+
+
+<body>
+	<table>
+		<th>
+			Part Number<br>
+			<input type="text" id="pn-search">
+		</th>
+		<th>
+			Part Description<br>
+			<input type="text" id="desc-search">
+		</th>
+		<th>
+			In Syteline <br>
+			<select id="syteline">
+				<option value=""></option>
+				<option value="true">True</option>
+				<option value="false">False</option>
+			</select>
+		</th>
+		<th>
+			Drawing Only <br>
+			<select id="drawing">
+				<option value=""></option>
+				<option value="true">True</option>
+				<option value="false">False</option>
+			</select>
+		</th>
+		<th>
+			Notes
+		</th>
+		{% for part in parts %}
+			<tr id="{{ part.part_number }}">
+				<td class="part-number">
+					{{ part.part_number }}
+				</td>
+				<td class="part-description">
+					{{ part.part_description }}
+				</td>
+				<td class="part-syteline">
+					{{ part.in_syteline }}
+				</td>
+				<td class="part-drawing">
+					{{ part.drawing_only }}
+				</td>
+				<td class="part-notes">
+					{{ part.notes }}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+</body>
+<script type="text/javascript">
+	var parts = {};
+	var rows = document.getElementsByTagName("tr");
+	var pn_crit = document.getElementById("pn-search");
+	var desc_crit = document.getElementById("desc-search");
+	var syteline_crit = document.getElementById("syteline");
+	var drawing_crit = document.getElementById("drawing");
+
+	function filter(criteria, data){
+		var filterRE = new RegExp(criteria, 'gi');
+		var dataList = document.getElementsByClassName(data);
+		for(let l = 0; l < dataList.length; l++){
+			if(dataList[l].parentNode.style.display != "none"){		
+				if(filterRE.test(dataList[l].innerHTML)){
+					var rRow = dataList[l].parentNode;
+					rRow.style.display = "table-row";
+				}else{
+					var rRow = dataList[l].parentNode;
+					rRow.style.display = "none";
+				}
+			}
+		}
+	};
+
+pn_crit.onchange = function(){
+	filter(pn_crit.value, "part-number");
+}
+
+desc_crit.onchange = function(){
+	filter(desc_crit.value, "part-description");
+}
+
+syteline_crit.onchange = function(){
+	filter(syteline.options[syteline.selectedIndex].value, "part-syteline");
+}
+
+
+</script>
+
+
+ {% else %}
+  {% include 'redirect.html' %}
+ {% endif %}
+{% endblock %}

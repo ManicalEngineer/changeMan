@@ -37,4 +37,5 @@ urlpatterns = [
     path('rev/add/<str:drawing_number>/<int:eco_number>/', cViews.revise_drawing, name="add_rev"),
     path('performance/', cViews.performance, name="performance"),
     path('parts/util/add_series/', views.updateSeries, name="update_series"),
+    path('parts/', views.part_list, name="part_list"),
 ]
