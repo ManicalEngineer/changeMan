@@ -67,27 +67,27 @@
 		var filterRE = new RegExp(criteria, 'gi');
 		var dataList = document.getElementsByClassName(data);
 		for(let l = 0; l < dataList.length; l++){
-			if(dataList[l].parentNode.style.display != "none"){		
-				if(filterRE.test(dataList[l].innerHTML)){
-					var rRow = dataList[l].parentNode;
-					rRow.style.display = "table-row";
-				}else{
-					var rRow = dataList[l].parentNode;
-					rRow.style.display = "none";
-				}
+			
+			if(filterRE.test(dataList[l].innerHTML)){
+				var rRow = dataList[l].parentNode;
+				rRow.style.display = "table-row";
+			}else{
+				var rRow = dataList[l].parentNode;
+				rRow.style.display = "none";
 			}
+			
 		}
 	};
 
-pn_crit.onchange = function(){
+pn_crit.oninput = function(){
 	filter(pn_crit.value, "part-number");
 }
 
-desc_crit.onchange = function(){
+desc_crit.oninput = function(){
 	filter(desc_crit.value, "part-description");
 }
 
-syteline_crit.onchange = function(){
+syteline_crit.oninput = function(){
 	filter(syteline.options[syteline.selectedIndex].value, "part-syteline");
 }
 
