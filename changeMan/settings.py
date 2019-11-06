@@ -25,7 +25,7 @@ SECRET_KEY = 'vs)zkpk&ly65nh3-yam26ey6=xr^$bs*np8o!^a4coo1a4xt90'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['raspberrypi', '192.168.1.155']
 
 
 # Application definition
@@ -131,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = 'changeMan/static/'
+
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
 
