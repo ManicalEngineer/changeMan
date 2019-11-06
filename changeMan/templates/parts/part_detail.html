@@ -13,8 +13,19 @@
   }
 </style>
   <body>
-    <h1 id="heading">{{ part.part_number }} - {{ part.part_description }}</h1>
-    <span id="by-line">Created By: {{ part.initiated_by.last_name }}, {{ part.initiated_by.first_name }} on {{ part.create_date }}</span>
+    <h1 id="heading">{{ part.part_number }}: {{ part.part_description }}</h1>
+    <span id="by-line">Created By: {{ part.initiated_by.last_name }}, {{ part.initiated_by.first_name }} on {{ part.create_date }}</span><br>
+    {% if part.in_syteline %}
+      <span>In Syteline</span><br>
+    {% else %}
+      <span>Not In Syteline</span><br>
+    {% endif %}
+    {% if part.drawing_only %}
+      <span>Drawing Only</span>
+    {% endif %}
+    <p>
+      {{ part.notes }}
+    </p>
     <h2>Revisions</h2>
     <table>
       <th>

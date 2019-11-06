@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = 'vs)zkpk&ly65nh3-yam26ey6=xr^$bs*np8o!^a4coo1a4xt90'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['raspberrypi', '192.168.1.155']
+ALLOWED_HOSTS = ['raspberrypi', '192.168.1.155', 'localhost']
 
 
 # Application definition
@@ -129,18 +130,23 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
+try:
+    HOSTNAME = socket.gethostname()
+except:
+    HOSTNAME = 'localhost'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = 'changeMan/static/'
+if HOSTNAME == 'localhost':
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "changeMan/static/"),
+    ]
+else:
+    STATIC_ROOT = 'changeMan/static/'
 
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "changeMan/static/"),
-]
 
 
 # EMAIL BACKEND SETTINGS

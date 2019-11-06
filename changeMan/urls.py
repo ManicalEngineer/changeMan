@@ -22,7 +22,7 @@ from changes import views as cViews
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('access/', include('django.contrib.auth.urls')),
-    path('dashboard/', cViews.dashboard, name="dashboard"),
+    path('', cViews.dashboard, name="dashboard"),
     path('parts/spRequest/', views.get_last, name="SPR"),
     path('parts/add/', views.add_part, name="add_part"),
     path('parts/<str:part_number>/', views.part, name="part_summary"),
@@ -30,12 +30,9 @@ urlpatterns = [
     path('ecr/add/', cViews.ecr_add, name="add_ecr"),
     path('ecr/edit/<int:ecr_number>/', cViews.ecr_edit, name="ecr_edit"),
     path('ecr/list/', cViews.ecr_list, name="ecr_list"),
-    path('eco/add/', cViews.eco_add, name="add_eco"),
-    path('eco/edit/<int:eco_number>/', cViews.eco_edit, name="eco_edit"),
-    path('eco/<int:eco_number>/', cViews.eco_detail, name="eco_detail"),
-    path('eco/list/', cViews.eco_list, name="eco_list"),
-    path('rev/add/<str:drawing_number>/<int:eco_number>/', cViews.revise_drawing, name="add_rev"),
+    path('rev/add/<str:drawing_number>/<int:ecr_number>/', cViews.revise_drawing, name="add_rev"),
     path('performance/', cViews.performance, name="performance"),
     path('parts/util/add_series/', views.updateSeries, name="update_series"),
     path('parts/', views.part_list, name="part_list"),
+    path('parts/edit/<str:part_number>/', views.edit_part, name="edit_part"),
 ]

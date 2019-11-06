@@ -5,8 +5,8 @@
 <link rel="stylesheet" href= "{% static "css/detail.css" %}">
     <h1>ECR{{ ecr.ECR_number }}: {{ ecr.ecr_title }}  -  {{ ecr.status }}</h1>
     Created on: {{ ecr.create_date }}<br>
-    By: {{ ecr.initiated_by.last_name }}, {{ ecr.initiated_by.first_name }} <br>
-    Assigned to: {{ ecr.engineer }}
+    By: {{ ecr.initiated_by.first_name }} {{ ecr.initiated_by.last_name }}<br>
+    Assigned to: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
     <div class="title">
       <h2>Affected Parts</h2>
       <div class="data">
@@ -15,50 +15,34 @@
         {% endfor %}<br>
       </div>
     </div>
-
     <div class="title">
-      <h2>Idenified Problem or Improvements</h2>
+      <h2>Description of Concern/Improvement</h2>
       <div class="data">
-        {{ ecr.requested_change }}<br>
-      </div>
-    </div>
-    <div class="title">
-      <h2>Proposed Solution & Cost Esitmate</h2>
-      <div class="data">
-        {{ ecr.solution }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Technical Design & Review Requirements, Production Impact</h2>
-      <div class="data">
-        {{ ecr.requirements }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Product Impact</h2>
-      <div class="data">
-        {{ ecr.impact }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Excution Steps</h2>
-      <div class="data">
-        {{ ecr.steps }}
-      </div>
-    </div>
-    <div class="title">
-      <h2>Temporary Remediation If Needed</h2>
-      <div class="data">
-        {{ ecr.remediation }}
+        {{ ecr.description }}
       </div>
     </div>
 
     <div class="title">
-      <h2>Notes</h2>
+      
       <div class="data">
-        {{ ecr.notes }}
+        <table>
+          <caption><h2>Notes</h2></caption>
+          <tr>
+            <th>Date</th>
+            <th>Note</th>
+            <th>Author</th>
+          </tr>
+            {% for note in notes %}
+              <tr> 
+                <td>{{ note.create_date }}</td>
+                <td>{{ note.content }}</td>
+                <td>{{ note.author.last_name }}, {{ note.author.first_name }} </td>
+              </tr>
+            {% endfor %}
+          </table>
       </div>
     </div>
+
 <a href="{% url 'ecr_detail' ecr.ECR_number|add:"-1" %}">Prev</a> <a href="{% url 'ecr_detail' ecr.ECR_number|add:"1" %}">Next</a>
 {% else %}
    {% include 'redirect.html' %}

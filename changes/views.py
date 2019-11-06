@@ -6,9 +6,9 @@ from django.conf import settings
 from datetime import datetime
 from datetime import timedelta
 
-from .models import ECO, ECR, Revision
+from .models import ECR, Revision, Notes
 from parts.models import Part
-from .forms import AddECRForm, AddECOForm, CreateRevision
+from .forms import AddECRForm, CreateRevision
 
 # Create your views here.
 
@@ -16,7 +16,6 @@ from .forms import AddECRForm, AddECOForm, CreateRevision
 def dashboard(request):
     if request.user.is_authenticated:
         ecrs = ECR.objects.filter(engineer__exact=request.user)
-        ecos = ECO.objects.filter(engineer__exact=request.user)
         #parts = Part.objects.filter(initiated_by__exact=request.user)
         return render(request, 'changes/dashboard.html', {'ecrs': ecrs, 'ecos': ecos})
     else:
@@ -32,8 +31,9 @@ def ecr_list(request):
 
 def ecr_detail(request, ecr_number):
     ecr = get_object_or_404(ECR, pk=ecr_number)
+    notes = Notes.objects.filter(ecr_number__exact=ecr_number)
     mf = ECR._meta.get_fields()
-    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf})
+    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes})
 
 
 def ecr_add(request):
@@ -105,55 +105,7 @@ def ecr_edit(request, ecr_number):
     return render(request, "changes/add_ecr.html", {'form': form})
 
 
-def eco_add(request):
-    if request.method == "POST":
-        form = AddECOForm(request.POST)
-        if form.is_valid():
-            eco = form.save(commit=False)
-            eco.initiated_by = request.user
-            eco = form.save()
-    else:
-        form = AddECOForm()
-    return render(request, 'changes/add_eco.html', {'form': form})
-
-
-def eco_edit(request, eco_number):
-    eco = ECO.objects.get(pk=eco_number)
-    if request.method == "POST":
-        form = AddECOForm(request.POST, instance=eco)
-        if form.is_valid():
-            eco = form.save(commit=False)
-            eco.initiated_by = request.user
-            eco = form.save()
-            return redirect('eco_detail', eco_number=eco.ECO_number)
-    else:
-        form = AddECOForm(instance=eco)
-    return render(request, "changes/add_eco.html", {'form': form})
-
-
-def eco_detail(request, eco_number):
-    eco = get_object_or_404(ECO, pk=eco_number)
-    mf = ECO._meta.get_fields()
-
-    #part_revs = {}
-
-    # for pn in eco.part_numbers.all():
-    #rev = Revision.objects.filter(revised_drawing__exact=pn).order_by('-revision_level')
-    #part_revs.update({pn: rev[0]})
-
-    return render(request, 'changes/eco_detail.html', {'eco': eco})
-
-
-def eco_list(request):
-    op_ecos = ECO.objects.filter(oa_status__exact='OP')
-    ip_ecos = ECO.objects.filter(oa_status__exact='IP')
-    oh_ecos = ECO.objects.filter(oa_status__exact='OH')
-    cr_ecos = ECO.objects.filter(oa_status__exact='CR')
-
-    return render(request, 'changes/eco_list.html', {'op_ecos': op_ecos, 'ip_ecos': ip_ecos, 'oh_ecos': oh_ecos, 'cr_ecos': cr_ecos})
-
-
-def revise_drawing(request, drawing_number, eco_number):
+def revise_drawing(request, drawing_number, ecr_number):
     if request.method == "POST":
         form = CreateRevision(request.POST)
         if form.is_valid():
@@ -170,7 +122,7 @@ def revise_drawing(request, drawing_number, eco_number):
 
         form = CreateRevision(initial={'revised_drawing': drawing_number,
                                        'revision_level': new_rev,
-                                       'ECO_number': eco_number})
+                                       'ECRnumber': ecr_number})
 
     return render(request, 'changes/add_rev.html', {'form': form})
 

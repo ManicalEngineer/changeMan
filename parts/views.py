@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.templatetags.static import static
 
 from .models import Part
-from changes.models import Revision, ECO, ECR
+from changes.models import Revision, ECR
 from .forms import AddPartForm
 
 import json
@@ -30,9 +30,8 @@ def add_part(request):
 def part(request, part_number):
     part = Part.objects.get(pk=part_number)
     revs = Revision.objects.filter(revised_drawing=str(part_number))
-    ecos = ECO.objects.filter(part_numbers=str(part_number))
     ecrs = ECR.objects.filter(part_numbers=str(part_number))
-    return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecos': ecos, 'ecrs': ecrs})
+    return render(request, 'parts/part_detail.html', {'part': part, 'revs': revs, 'ecrs': ecrs})
 
 
 def get_last(request):
@@ -79,3 +78,15 @@ def updateSeries(request):
     print(pn_series)
 
     return HttpResponse(pn_series)
+
+
+def edit_part(request, part_number):
+    part = Part.objects.get(pk=part_number)
+    if request.method == "POST":
+        form = AddPartForm(request.POST, instance=part)
+        if form.is_valid():
+            part = form.save()
+            return redirect('part_summary', part_number=part.part_number)
+    else:
+        form = AddPartForm(instance=part)
+    return render(request, "parts/add_part.html", {'form': form})

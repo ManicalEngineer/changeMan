@@ -53,8 +53,14 @@
 		var pn_desc = document.getElementById("id_part_description");
 		var pn_box = document.getElementById("id_part_number");
 		var form = document.getElementById("part-number-frm");
-		form.elements[6].disabled = true;
-
+		
+		if(!window.location.href.includes("part")){
+			form.elements[6].disabled = true;
+			console.log(window.location.href);
+		} else {
+			form.elements[6].disabled = false;
+			console.log(window.location.href);
+		};
 		document.getElementById("id_part_number").setAttribute("readonly", "readonly");
 
 
