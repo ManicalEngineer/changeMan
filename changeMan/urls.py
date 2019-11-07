@@ -18,6 +18,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from parts import views
 from changes import views as cViews
+from projects import views as pViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,13 +27,16 @@ urlpatterns = [
     path('parts/spRequest/', views.get_last, name="SPR"),
     path('parts/add/', views.add_part, name="add_part"),
     path('parts/<str:part_number>/', views.part, name="part_summary"),
-    path('ecr/<int:ecr_number>/', cViews.ecr_detail, name="ecr_detail"),
-    path('ecr/add/', cViews.ecr_add, name="add_ecr"),
-    path('ecr/edit/<int:ecr_number>/', cViews.ecr_edit, name="ecr_edit"),
-    path('ecr/list/', cViews.ecr_list, name="ecr_list"),
-    path('rev/add/<str:drawing_number>/<int:ecr_number>/', cViews.revise_drawing, name="add_rev"),
-    path('performance/', cViews.performance, name="performance"),
     path('parts/util/add_series/', views.updateSeries, name="update_series"),
     path('parts/', views.part_list, name="part_list"),
     path('parts/edit/<str:part_number>/', views.edit_part, name="edit_part"),
+    path('ecr/<int:ecr_number>/', cViews.ecr_detail, name="ecr_detail"),
+    path('ecr/add/', cViews.ecr_add, name="add_ecr"),
+    path('ecr/edit/<int:ecr_number>/', cViews.ecr_edit, name="ecr_edit"),
+    path('ecr/', cViews.ecr_list, name="ecr_list"),
+    path('rev/add/<str:drawing_number>/<int:ecr_number>/', cViews.revise_drawing, name="add_rev"),
+    path('performance/', cViews.performance, name="performance"),
+    path('project/', pViews.project_list, name="project_list"),
+    path('project/<int:id>', pViews.project, name="project"),
+
 ]

@@ -4,26 +4,42 @@
   {% load static %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href= "{% static "css/base.css" %}">
+  
 </head>
 <body>
   <header>
     <img id="header-img" src="{% static "images/ml-logo.png" %}">
     <div class="navbar">
-      <!-- <a href="{% url 'dashboard' %}">Dashboard</a> -->
-      <a href="{% url 'add_part' %}">Add Part</a>
+      <a href="{% url 'dashboard' %}">Dashboard</a>
       <div class="dropdown">
-       <!--  <button class="dropbtn">ECR <i class="fa fa-caret-down"></i>
+       <button class="dropbtn">Parts <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'add_part' %}">Add</a>
+          <a href="{% url 'part_list' %}">List</a>
+        </div>
+      </div> 
+      <div class="dropdown">
+       <button class="dropbtn">ECRs <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
           <a href="{% url 'add_ecr' %}">Add</a>
           <a href="{% url 'ecr_list' %}">List</a>
         </div>
-      </div> 
-       -->
+      </div>
+      <div class="dropdown">
+       <button class="dropbtn">Projects <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'add_ecr' %}">Add</a>
+          <a href="{% url 'project_list' %}">List</a>
+        </div>
+      </div>  
       </div>
     </div>
 
   </header>
+  <span>Welcome back {{ user.first_name }} {{ user.last_name }}!</span>
   {% block content %}
   {% endblock %}
 </body>

@@ -34,10 +34,10 @@ class ECR(models.Model):
     initiated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     engineer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ECR", blank=True, null=True)
     ECR_number = models.AutoField(primary_key=True, verbose_name="ECR Number")
-    part_numbers = models.ManyToManyField("parts.Part", verbose_name="Affected Part Numbers", blank=True, null=True)
+    part_numbers = models.ManyToManyField("parts.Part", verbose_name="Affected Part Numbers", blank=True)
 
     description = models.CharField(max_length=300, blank=True, null=True)
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='IP')
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='OP')
     ecr_disposition = models.CharField(max_length=3, choices=DISPO_CHOICES, null=True, blank=True)
     close_date = models.DateField(null=True, blank=True)
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='1')
@@ -51,7 +51,7 @@ class Notes(models.Model):
     ecr_number = models.ForeignKey('ECR', on_delete=models.CASCADE, verbose_name="Related ECR Number", null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     create_date = models.DateField(auto_now_add=True)
-    content = models.CharField(max_length=300, blank=True, null=True)
+    content = models.CharField(max_length=300, blank=True, null=True, verbose_name="Notes")
 
 
 class Revision(models.Model):

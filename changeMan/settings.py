@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['raspberrypi', '192.168.1.155', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'projects.apps.ProjectsConfig',
     'changes.apps.ChangesConfig',
     'parts.apps.PartsConfig',
     'django.contrib.admin',
@@ -135,16 +136,18 @@ try:
 except:
     HOSTNAME = 'localhost'
 
+print(HOSTNAME)
+
 STATIC_URL = '/static/'
 
-if HOSTNAME == 'localhost':
+if HOSTNAME == 'sbicknell-PC':
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "changeMan/static/"),
     ]
 else:
     STATIC_ROOT = 'changeMan/static/'
+    ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
 

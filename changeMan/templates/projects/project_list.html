@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<body>
+  <table>
+    <caption><h1>Projects</h1></caption>
+    <tr>
+      <th>Project Title</th>
+      <th>Project Type</th>
+      <th>Project Sponsor</th>
+      <th>Project Engineer</th>
+    </tr>
+    {% for project in projects %}
+    <tr>
+      <td></td>
+      <td>{{ project.title }}</td>
+      <td>{{ project.get_proj_type_display }}</td>
+      <td>{{ project.sponsor.first_name }} {{ project.sponsor.last_name }}</td>
+      <td>{{ project.engineer.first_name }} {{ project.engineer.last_name }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+
+
+{% else %}
+  {% include 'redirect.html' %}
+{% endif %}
+
+{% endblock %}

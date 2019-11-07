@@ -8,7 +8,7 @@ from datetime import timedelta
 
 from .models import ECR, Revision, Notes
 from parts.models import Part
-from .forms import AddECRForm, CreateRevision
+from .forms import AddECRForm, CreateRevision, AddNoteForm
 
 # Create your views here.
 
@@ -17,7 +17,7 @@ def dashboard(request):
     if request.user.is_authenticated:
         ecrs = ECR.objects.filter(engineer__exact=request.user)
         #parts = Part.objects.filter(initiated_by__exact=request.user)
-        return render(request, 'changes/dashboard.html', {'ecrs': ecrs, 'ecos': ecos})
+        return render(request, 'changes/dashboard.html', {'ecrs': ecrs})
     else:
         return render(request, 'redirect.html')
 
@@ -33,7 +33,33 @@ def ecr_detail(request, ecr_number):
     ecr = get_object_or_404(ECR, pk=ecr_number)
     notes = Notes.objects.filter(ecr_number__exact=ecr_number)
     mf = ECR._meta.get_fields()
-    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes})
+
+    if request.method == "POST":
+        form = AddNoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.author = request.user
+            note.ecr_number = get_object_or_404(ECR, pk=ecr_number)
+            note = form.save()
+            return redirect('ecr_detail', ecr_number=ecr.ECR_number)
+    else:
+        form = AddNoteForm()
+
+    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes, 'form': form})
+
+
+# def add_notes(request, ecr_number):
+#     if request.method == "POST":
+#         form = AddNoteForm(request.POST)
+#         if form.is_valid():
+#             note = form.save(commit=False)
+#             note.author = request.user
+#             note.ecr_number = get_object_or_404(ECR, pk=ecr_number)
+#             note = form.save()
+#             return redirect('ecr_detail', ecr_number=ecr.ECR_number)
+#     else:
+#         form = AddNoteForm()
+#     return render(request, 'changes/ecr_detail.html', )
 
 
 def ecr_add(request):

@@ -2,11 +2,30 @@
 {% block content %}
 {% load static %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href= "{% static "css/detail.css" %}">
-    <h1>ECR{{ ecr.ECR_number }}: {{ ecr.ecr_title }}  -  {{ ecr.status }}</h1>
+    <link rel="stylesheet" href= "{% static "css/detail.css" %}">
+    <style>
+      textarea {
+        width: 100%;
+      }
+
+      p {
+        width: 100%;
+        padding: 20px;
+        margin: auto; 
+      }
+      form {
+        width: 100%;
+        margin: auto;
+
+      }
+      td {
+        padding: 0 10px 0 10px;
+      }
+    </style>
+    <h1><a href="{% url 'ecr_edit' ecr.ECR_number %}"> ECR{{ ecr.ECR_number }}: </a> {{ ecr.ecr_title }}  -  {{ ecr.get_status_display }}</h1>
     Created on: {{ ecr.create_date }}<br>
     By: {{ ecr.initiated_by.first_name }} {{ ecr.initiated_by.last_name }}<br>
-    Assigned to: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
+    Current Owner: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
     <div class="title">
       <h2>Affected Parts</h2>
       <div class="data">
@@ -25,6 +44,7 @@
     <div class="title">
       
       <div class="data">
+        {% if notes %}
         <table>
           <caption><h2>Notes</h2></caption>
           <tr>
@@ -34,12 +54,22 @@
           </tr>
             {% for note in notes %}
               <tr> 
-                <td>{{ note.create_date }}</td>
-                <td>{{ note.content }}</td>
-                <td>{{ note.author.last_name }}, {{ note.author.first_name }} </td>
+                <td style="white-space: nowrap;">{{ note.create_date }}</td>
+                <td style="word-wrap: break-word;">{{ note.content }}</td>
+                <td>{{ note.author.first_name }} {{ note.author.last_name }} </td>
               </tr>
             {% endfor %}
           </table>
+          {% else %}
+            <h2>No Notes</h2>
+          {% endif %}
+          <form id="part-number-frm" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Note</button>
+          </form>
+        
+
       </div>
     </div>
 

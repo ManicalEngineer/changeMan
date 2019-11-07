@@ -24,54 +24,29 @@
     {% endif %}
 </div> -->
 <div>
+  
   <h2>ECRs Assigned:</h2>
-    <table>
-  <tr>
-    <th>ECR</th>
-    <th>Title</th>
-    <th>Created Date</th>
-    <th>Created By</th>
-    <th>Status</th>
-  </tr>
-  {% for ecr in ecrs %}
-  <tr>
-    <td class="ecr-num cell">ECR{{ ecr.ECR_number }}<div class="ecr-notes hidden"><span class="">Notes:</span> {{ ecr.notes }}</div></td>
-    
-    <td class="cell">{{ ecr.ecr_title }}</td>
-    <td class="cell">{{ ecr.create_date }}</td>
-    <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
-    <td class="cell">{{ ecr.get_status_display }}</td>
-    <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
-    
-  </tr>
-  {% endfor %}
-  </table>
+  <table>
+    <tr>
+      <th>ECR</th>
+      <th>Title</th>
+      <th>Created Date</th>
+      <th>Created By</th>
+      <th>Status</th>
+    </tr>
+    {% for ecr in ecrs %}
+    <tr>
+      <td class="cell">ECR{{ ecr.ECR_number }}</td>    
+      <td class="cell">{{ ecr.ecr_title }}</td>
+      <td class="cell">{{ ecr.create_date }}</td>
+      <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
+      <td class="cell">{{ ecr.get_status_display }}</td>
+      <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
+    </tr>
+    {% endfor %}
+    </table>
 </div>
-<div>
-  <h2>ECOs Assigned:</h2>
-    <table>
-  <tr>
-    <th>ECO</th>
-    <th>Title</th>
-    <th>Created Date</th>
-    <th>Created By</th>
-    <th>Complete By</th>
-    <th>Lead Engineer</th>
-  </tr>
-  {% for eco in ecos %}
-  <tr>
-    <td class="cell">ECO{{ eco.ECO_number }}</td>
-    <td class="cell">{{ eco.eco_title }}</td>
-    <td class="cell">{{ eco.create_date }}</td>
-    <td class="cell">{{ eco.initiated_by.last_name }}, {{ eco.initiated_by.first_name }}</td>
-    <td class="cell">{{ eco.deadline }}</td>
-    <td class="cell">{{ eco.engineer.last_name }}, {{ eco.engineer.first_name }}</td>
-    <td class="cell"><a class="button" href="{% url 'eco_detail' eco.ECO_number %}">View</a><a class="button" href="{% url 'eco_edit' eco.ECO_number %}">Edit</a></td>
-  </tr>
-  {% endfor %}
-</table>
-</div>
-<script src="{% static "javascript/ecr_list.js" %}"></script>
+
 {% else %}
    {% include 'redirect.html' %}
 {% endif %}

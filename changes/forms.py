@@ -28,6 +28,16 @@ class AddECRForm(forms.ModelForm):
         js = ('/static/javascript/jsi18n.js',)
 
 
+class AddNoteForm(forms.ModelForm):
+
+    class Meta:
+        model = Notes
+        fields = ('content',)
+        widgets = {
+            'content': widgets.Textarea(),
+        }
+
+
 class CreateRevision(forms.ModelForm):
 
     class Meta:

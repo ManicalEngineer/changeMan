@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<body>
+  <table>
+    <caption><h1>Requirements</h1></caption>
+    <tr>
+      <th>Requirement Description</th>
+      <th>Shall/Should</th>
+      <th>Requirement Weight</th>
+      <th>Requirement Justification</th>
+    </tr>
+    {% for req in requirements %}
+    <tr>
+      <td></td>
+      <td>{{ req.description }}</td>
+      <td>{% if req.shall %}Shall{% else %} Should {% endif %}</td>
+      <td>{{ req.weight }}</td>
+      <td>{{ req.justification }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <table>
+    <caption><h1>Specifications</h1></caption>
+    <tr>
+      <th>Specification</th>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Satisfied Requirements</th>
+    </tr>
+    {% for spec in specifications %}
+    <tr>
+      <td>??</td>
+      <td>{{ spec.description }}</td>
+      <td>{{ spec.get_value_type_display }}</td>
+      <td>{{ spec.goal_value }}</td>
+      <td>{% for req in spec.requirements %}
+            <span>req.description</span>
+          {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+{% for concept in concepts %}
+<span>concept.media</span>
+{% endfor %}
+
+</body>
+
+
+{% else %}
+  {% include 'redirect.html' %}
+{% endif %}
+
+{% endblock %}

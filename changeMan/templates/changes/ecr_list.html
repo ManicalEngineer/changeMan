@@ -46,7 +46,7 @@
       
       <td class="cell">{{ ecr.ecr_title }}</td>
       <td class="cell">{{ ecr.create_date }}</td>
-      <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
+      <td class="cell">{{ ecr.initiated_by.last_name }}, {{ ecr.initiated_by.first_name }}</td>
       <td class="cell">{{ ecr.get_status_display }}</td>
       <td class="cell"><a class="button" href="{% url 'ecr_detail' ecr.ECR_number %}">View</a><a class="button" href="{% url 'ecr_edit' ecr.ECR_number %}">Edit</a></td>
       
@@ -68,8 +68,7 @@
     {% if oh_ecrs %}
     {% for ecr in oh_ecrs %}
     <tr>
-      <td class="ecr-num cell">ECR{{ ecr.ECR_number }}<div class="ecr-notes hidden"><span class="">Notes:</span> {{ ecr.notes }}</div></td>
-      
+      <td class="ecr-num cell">ECR{{ ecr.ECR_number }}</td>
       <td class="cell">{{ ecr.ecr_title }}</td>
       <td class="cell">{{ ecr.create_date }}</td>
       <td class="cell">{{ ecr.initiated_by.last_name}}, {{ ecr.initiated_by.first_name }}</td>
@@ -82,7 +81,7 @@
     {% else %}
       <h2>No On Hold ECRs</h2>
     {% endif %}
-  <script src="{% static "javascript/ecr_list.js" %}"></script>
+
 
 {% else %}
   {% include 'redirect.html' %}

@@ -3,6 +3,16 @@
 {% block content %}
 {% load static %}
   {% if user.is_authenticated %}
+
+  <style>
+    .row {
+      display: flex;
+    }
+
+    .side-by-side {
+      flex: 50%;
+    }
+  </style>
     <form action="" method="post">
       {% csrf_token %}
       {{ form.media }}
@@ -10,74 +20,43 @@
       {{ form.non_field_errors }}
       <div id="top">
         <div class="fieldWrapper">
-          {{ form.ecr_title.errors }}
-          <label id="titleLBL" for="{{ form.ecr_title.id_for_label }}">ECR Title</label>
-          {{ form.ecr_title }}
-        </div>
-        <div class="fieldWrapper">
           {{ form.engineer.errors }}
-          <label id="engineerLBL" for="{{ form.engineer.id_for_label }}">Assigned Engineer</label>
+          <label id="engineerLBL" for="{{ form.engineer.id_for_label }}">Owner: </label>
           {{ form.engineer }}
         </div>
         <div class="fieldWrapper">
           {{ form.status.errors }}
-          <label for="{{ form.status.id_for_label }}">Status</label>
+          <label for="{{ form.status.id_for_label }}">Status: </label>
           {{ form.status }}
         </div>
         <div class="fieldWrapper">
           {{ form.ecr_disposition.errors }}
-          <label for="{{ form.ecr_disposition.id_for_label }}">Disposition</label>
+          <label for="{{ form.ecr_disposition.id_for_label }}">Disposition: </label>
           {{ form.ecr_disposition }}
         </div>
       </div>
-
-      <div class="fieldWrapper" id="parts">
-        {{ form.part_numbers.errors }}
-        <label id="partsLBL" for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
-        {{ form.part_numbers }}
+      <div class="row">
+        <div class="side-by-side" id="left">
+          <div class="fieldWrapper" id="parts">
+            {{ form.part_numbers.errors }}
+            <label id="partsLBL" for="{{ form.part_numbers.id_for_label }}">Affected Parts</label>
+            {{ form.part_numbers }}
+          </div>
+        </div>
+        <div class="side-by-side" id="right">
+          <div class="fieldWrapper">
+            {{ form.ecr_title.errors }}
+            <label id="titleLBL" for="{{ form.ecr_title.id_for_label }}">ECR Title: </label>
+            {{ form.ecr_title }}
+          </div>
+          <div class="fieldWrapper" id="description">
+            {{ form.description.errors }}
+            <label for="{{ form.description.id_for_label }}" style="display: block;" >Description: </label>
+            {{ form.description }}
+          </div>
+        </div>
       </div>
 
-      <div class="fieldWrapper">
-        {{ form.requested_change.errors }}
-        <label id="changeLBL" for="{{ form.requested_change.id_for_label }}">Requested Change or Improvement</label><br>
-        {{ form.requested_change }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.solution.errors }}
-        <label id="solutionLBL" for="{{ form.solution.id_for_label }}">Proposed Solution & Expected Costs</label><br>
-        {{ form.solution }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.requirements.errors }}
-        <label id="requirementsLBL" for="{{ form.requirements.id_for_label }}">Requirements</label><br>
-        {{ form.requirements }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.impact.errors }}
-        <label id="impactLBL" for="{{ form.impact.id_for_label }}">Impact (ALI/ETL ecta)</label><br>
-        {{ form.impact }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.steps.errors }}
-        <label id="stepsLBL" for="{{ form.steps.id_for_label }}">Steps to Complete</label><br>
-        {{ form.steps }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.remediation.errors }}
-        <label id="remediationLBL" for="{{ form.remediation.id_for_label }}">Temporary Remediation</label><br>
-        {{ form.remediation }}
-      </div>
-
-      <div class="fieldWrapper">
-        {{ form.notes.errors }}
-        <label id="notesLBL" for="{{ form.notes.id_for_label }}">Notes - Please Include Initials and Date</label><br>
-        {{ form.notes }}
-      </div>
 
 
 
