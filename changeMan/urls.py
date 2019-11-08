@@ -38,5 +38,6 @@ urlpatterns = [
     path('performance/', cViews.performance, name="performance"),
     path('project/', pViews.project_list, name="project_list"),
     path('project/<int:id>', pViews.project, name="project"),
-
+    path('project/add/', pViews.add_project, name="add_project"),
+    path('download/projects/<str:path>', pViews.download_media, name="download"),
 ]

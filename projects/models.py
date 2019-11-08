@@ -19,6 +19,9 @@ class Project(models.Model):
     goal = models.CharField(max_length=300)
     proj_type = models.CharField(max_length=3, choices=PROJ_TYPES, default='RD')
 
+    def __str__(self):
+        return self.title
+
 
 class Requirement(models.Model):
     create_date = models.DateField(auto_now_add=True)
@@ -43,7 +46,7 @@ class Specification(models.Model):
         ("RANGE", "Between"),
     )
     create_date = models.DateField(auto_now_add=True)
-    requirements = models.ManyToManyField("Requirement", verbose_name="Satisfies Requirement(s)")
+    requirements = models.ManyToManyField("Requirement", verbose_name="Satisfies Requirement(s)", related_name="requirements")
     value_type = models.CharField(max_length=5, choices=VALUE_TYPE, default='LESS')
     goal_value = models.CharField(max_length=10)
     description = models.CharField(max_length=300)

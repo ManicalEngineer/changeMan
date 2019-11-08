@@ -14,8 +14,7 @@
     </tr>
     {% for project in projects %}
     <tr>
-      <td></td>
-      <td>{{ project.title }}</td>
+      <td><a href="{% url 'project' project.id %}">{{ project.title }}</a></td>
       <td>{{ project.get_proj_type_display }}</td>
       <td>{{ project.sponsor.first_name }} {{ project.sponsor.last_name }}</td>
       <td>{{ project.engineer.first_name }} {{ project.engineer.last_name }}</td>

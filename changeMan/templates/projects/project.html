@@ -4,8 +4,16 @@
 {% if user.is_authenticated %}
 <link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
 <body>
+  <h1>{{ project.get_proj_type_display }} - {{ project.title }}</h1>
+  Created: {{ project.create_date }}<br>
+  Sponser: {{ project.sponsor.first_name }} {{ project.sponsor.last_name }}<br>
+  Assigned Engineer: {{ project.engineer.first_name }} {{ project.engineer.last_name }}
+  <div>
+    <spand><h2>Project Goal(s)/Description</h2></span>
+    <p>{{ project.goal }}</p>
+  </div>
   <table>
-    <caption><h1>Requirements</h1></caption>
+    <caption><h2>Requirements</h2></caption>
     <tr>
       <th>Requirement Description</th>
       <th>Shall/Should</th>
@@ -14,7 +22,6 @@
     </tr>
     {% for req in requirements %}
     <tr>
-      <td></td>
       <td>{{ req.description }}</td>
       <td>{% if req.shall %}Shall{% else %} Should {% endif %}</td>
       <td>{{ req.weight }}</td>
@@ -24,7 +31,7 @@
   </table>
 
   <table>
-    <caption><h1>Specifications</h1></caption>
+    <caption><h2>Specifications</h2></caption>
     <tr>
       <th>Specification</th>
       <th>Type</th>
@@ -33,20 +40,57 @@
     </tr>
     {% for spec in specifications %}
     <tr>
-      <td>??</td>
       <td>{{ spec.description }}</td>
-      <td>{{ spec.get_value_type_display }}</td>
+      <td>{{ spec.value_type }}</td>
       <td>{{ spec.goal_value }}</td>
       <td>{% for req in spec.requirements %}
-            <span>req.description</span>
+            <span>{{ req.description }}</span><br>
           {% endfor %}
       </td>
     </tr>
     {% endfor %}
   </table>
 
+  <table>
+    <caption><h2>Concepts</h2></caption>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Grade</th>
+      <th>Media</th>
+      <th>Selected</th>
+    </tr>
+    {% for concept in concepts %}
+    <tr>
+      <td>{{ concept.title }}</td>
+      <td>{{ concept.description }}</td>
+      <td>{{ concept.grade }}</td>
+      <td>{{ concept.media }}</td>
+      <td>{{ concept.selected }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <table>
+    <caption><h2>Feedback</h2></caption>
+    <tr>
+      <th>Stage</th>
+      <th>Feedback</th>
+      <th>Who</th>
+      <th>Resolved</th>
+    </tr>
+    {% for feed in feedback %}
+    <tr>
+      <td>{{ feed.get_stage_display }}</td>
+      <td>{{ feed.content }}</td>
+      <td>{{ feed.author.first_name }} {{ feed.author.last_name }}</td>
+      <td>{{ feed.resolved }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
 {% for concept in concepts %}
-<span>concept.media</span>
+<span><a href="/download/{{ concept.media.name }}">{{ concept.media.name }}</span>
 {% endfor %}
 
 </body>

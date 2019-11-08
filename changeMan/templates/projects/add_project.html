@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<link rel="stylesheet" href= "{% static "css/ecr_list.css" %}">
+<form action="" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit">Save</button>
+    </form>
+
+{% else %}
+  {% include 'redirect.html' %}
+{% endif %}
+
+{% endblock %}
