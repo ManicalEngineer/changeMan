@@ -2,13 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.templatetags.static import static
+from django.conf import settings
 
 from .models import Part
 from changes.models import Revision, ECR
 from .forms import AddPartForm
 
 import json
-
+import os
 # Create your views here.
 
 
@@ -71,13 +72,15 @@ def part_list(request):
     parts = Part.objects.all()
     return render(request, 'parts/part_list.html', {'parts': parts})
 
-
-def updateSeries(request):
-    f = open('C:\\Users\\sbicknell\\Documents\\Python Scripts\\Django\\changeMan\\changeMan\\static\\javascript\\part_number_data.json', 'r')
+def updateSeries(request): 
+    print(settings.STATICFILES_DIRS[0])
+    JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data.json'
+    print(JSON_PATH)
+    f = open(JSON_PATH, 'r')
     pn_series = json.load(f)
-    print(pn_series)
+    part = Part.objects.all()
 
-    return HttpResponse(pn_series)
+    return render(request, 'parts/add_series.html')
 
 
 def edit_part(request, part_number):

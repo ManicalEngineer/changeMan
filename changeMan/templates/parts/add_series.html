@@ -1,45 +1,142 @@
-<!doctype html>
-<html class="no-js" lang="">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+{% load static %}
     <body>
-    	<table id="series-table">
-    		<tr>
-    			<td>Part Series Type: </td>
-    			<td><input type="text"></td>
-    		</tr>
-    		<tr>
-    			<td>Part Series Pre-fix:Value</td>
-    			<td><input type="text" class="pre-fix"></td>
-    			<td><input type="text" class="value"></td>
-    		</tr>
-    	</table>
-    	<button id="addBtn">Add Row</button>
+        <div id="container">
+            <div id="tbl-container">
+            	<table id="series-table">
+            		<tr>
+            			<td>Part Series: </td>
+            			<td><input type="text"></td>
+            		</tr>
+                </table>
+                <table id="series-pre">
+            		<tr>
+            			<td>Part Series Pre-Fix:Value</td>
+            			<td><input type="text" class="pre-fix"></td>
+            			<td><input type="text" class="pre-value"></td>
+            		</tr>
+                </table>
+                <table id="series-mid">
+                    <tr>
+                        <td>Part Series Mid-Class:Value</td>
+                        <td><input type="text" class="mid-fix"></td>
+                        <td><input type="text" class="mid-value"></td>
+                    </tr>
+            	</table>
+            </div>
+        </div>  
+    	<button id="addBtn">Add Row Pre</button>
+        <button id="addBtn-mid">Add Row Mid</button>
+        <button id="addBtn-part">Add New Series</button>
     </body>
   
         <script>
-        	var table = document.getElementById("series-table");
+        	var midTable = document.getElementById("series-mid");
+            var preTable = document.getElementById("series-pre");
         	var btn = document.getElementById("addBtn");
+            var midbtn = document.getElementById("addBtn-mid");
+            var sBtn = document.getElementById("addBtn-part");
         	
 
-        	btn.onclick = function(){
-        		var row = table.insertRow(-1);
-	        	var preCell = row.insertCell(0);
-	        	var vluCell = row.insertCell(1);
 
-	        	preCell.innerHTML('<input type="text" class="pre-fix">');
-	        	vluCell.innerHTML('<input type="text" class="value">');
+            function addPrefixRow(values, partClass){
+                var myDiv = document.getElementById("tbl-container-" + partClass);
+                var preTable = myDiv.querySelector('#series-pre');
+                var row = preTable.insertRow(-1);
+                var textCell = row.insertCell(0);
+                var preCell = row.insertCell(1);
+                var vluCell = row.insertCell(2);
+
+                textCell.innerHTML = 'Part Series Pre-Fix:Value';
+                preCell.innerHTML = '<input type="text" class="pre-fix">';
+                vluCell.innerHTML = '<input type="text" class="pre-value">';
+                var preTxt = preCell.getElementsByTagName("input")[0];
+                var vluTxt = vluCell.getElementsByTagName("input")[0];
+                preTxt.value = values[0];
+                vluTxt.value = values[1];
+            }
+
+            function addMidRow(values, partClass){
+                var myDiv = document.getElementById("tbl-container-" + partClass.slice(0,-5));
+                var midTable = myDiv.querySelector('#series-mid');
+                var row = midTable.insertRow(-1);
+                var textCell = row.insertCell(0);
+                var preCell = row.insertCell(1);
+                var vluCell = row.insertCell(2);
+                textCell.innerHTML = 'Part Series Mid-Class:Value;';
+                preCell.innerHTML = '<input type="text" class="mid-fix">';
+                vluCell.innerHTML = '<input type="text" class="mid-value">';
+                var preTxt = preCell.getElementsByTagName("input")[0];
+                var vluTxt = vluCell.getElementsByTagName("input")[0];
+                preTxt.value = values[0];
+                vluTxt.value = values[1];
+            }
+
+            function addSeries(values){
+                var container = document.getElementById("container");
+                var tbls = document.getElementById("tbl-container");
+                var newTbles = tbls.cloneNode(true);
+                newTbles.id = newTbles.id + '-' +
+                values[0];
+                container.appendChild(newTbles);
+                var nsTxt = newTbles.getElementsByTagName("input")[0];
+                nsTxt.value = values[0];
+                // console.log(newTbles);
+            }
+
+            var request = new XMLHttpRequest();
+
+            request.onload = function(){
+                if (request.status >= 200 && request.status < 300){
+                    var currSeries = JSON.parse(request.responseText);
+                    // console.log(currSeries.Lifts);
+                    for(let [key, value] of Object.entries(currSeries)){
+                        if(key == "Lifts"){
+                            for(var i = 0; i < value.length; i++){
+                                addSeries([value[i]]);
+                            }
+                        }else{
+                            if(key.includes("-Type")){
+                                
+                                for(var l = 0; l < value.length; l++){
+                                    addMidRow(value[l], key);
+                                }
+
+                            }else{
+        
+                                for(var k = 0; k < value.length; k++){
+                                    addPrefixRow(value[k], key);
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                else {
+                    console.log(request.status)
+                }
+            };
+
+            request.open("GET", "{{ STATIC_URL }}/static/javascript/part_number_data.json");
+            request.send();
+
+            btn.onclick = function(){
+                addPrefixRow(['','']);
         	};
 
-        	
+            midbtn.onclick = function(){
+                addMidRow(['','']);
+            };
 
-
+            sBtn.onclick = function(){
+                addSeries(['','']);
+            };
 
         </script>
         
-</html>
+    {% else %}
+    {% include 'redirect.html' %}
+  {% endif %}
+{% endblock %}

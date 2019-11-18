@@ -141,10 +141,11 @@ print(HOSTNAME)
 
 STATIC_URL = '/static/'
 
-if HOSTNAME == 'sbicknell-PC':
+if HOSTNAME == 'sbicknell-PC' or HOSTNAME == 'DESKTOP-L1T3C94' :
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "changeMan/static/"),
+        os.path.join(BASE_DIR, "changeMan\\static\\"),
     ]
+    #STATIC_ROOT = os.path.join(BASE_DIR, "changeMan/static/")
 else:
     STATIC_ROOT = 'changeMan/static/'
     ADMIN_MEDIA_PREFIX = '/static/admin/'
