@@ -83,7 +83,7 @@
                 container.appendChild(newTbles);
                 var nsTxt = newTbles.getElementsByTagName("input")[0];
                 nsTxt.value = values[0];
-                // console.log(newTbles);
+                
             }
 
             var request = new XMLHttpRequest();
@@ -99,7 +99,7 @@
                             }
                         }else{
                             if(key.includes("-Type")){
-                                
+
                                 for(var l = 0; l < value.length; l++){
                                     addMidRow(value[l], key);
                                 }
