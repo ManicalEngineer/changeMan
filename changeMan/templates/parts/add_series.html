@@ -4,7 +4,7 @@
 {% load static %}
     <body>
         <div id="container">
-            <div id="tbl-container">
+            <div id="tbl-container" class="tables-div">
             	<table id="series-table">
             		<tr>
             			<td>Part Series: </td>
@@ -30,6 +30,7 @@
     	<button id="addBtn">Add Row Pre</button>
         <button id="addBtn-mid">Add Row Mid</button>
         <button id="addBtn-part">Add New Series</button>
+        <button id="update">Update</button>
     </body>
   
         <script>
@@ -38,6 +39,7 @@
         	var btn = document.getElementById("addBtn");
             var midbtn = document.getElementById("addBtn-mid");
             var sBtn = document.getElementById("addBtn-part");
+            var uBtn = document.getElementById("update");
         	
 
 
@@ -65,6 +67,7 @@
                 var textCell = row.insertCell(0);
                 var preCell = row.insertCell(1);
                 var vluCell = row.insertCell(2);
+
                 textCell.innerHTML = 'Part Series Mid-Class:Value;';
                 preCell.innerHTML = '<input type="text" class="mid-fix">';
                 vluCell.innerHTML = '<input type="text" class="mid-value">';
@@ -78,8 +81,7 @@
                 var container = document.getElementById("container");
                 var tbls = document.getElementById("tbl-container");
                 var newTbles = tbls.cloneNode(true);
-                newTbles.id = newTbles.id + '-' +
-                values[0];
+                newTbles.id = newTbles.id + '-' + values[0];
                 container.appendChild(newTbles);
                 var nsTxt = newTbles.getElementsByTagName("input")[0];
                 nsTxt.value = values[0];
@@ -91,7 +93,7 @@
             request.onload = function(){
                 if (request.status >= 200 && request.status < 300){
                     var currSeries = JSON.parse(request.responseText);
-                    // console.log(currSeries.Lifts);
+                    console.log(currSeries);
                     for(let [key, value] of Object.entries(currSeries)){
                         if(key == "Lifts"){
                             for(var i = 0; i < value.length; i++){
@@ -122,6 +124,47 @@
             request.open("GET", "{{ STATIC_URL }}/static/javascript/part_number_data.json");
             request.send();
 
+            function updateSeries(){
+                var divs = document.getElementsByClassName("tables-div");
+                var updatedPN = {};
+                var lifts = [];
+                for(var j = 0; j < divs.length; j++){
+                    var tbls = divs[j].querySelector('table');
+                    var iptVlu = tbls.querySelector('input');
+                    
+                    if(iptVlu.value != ''){
+                        lifts.push(iptVlu.value);
+                        var preFixes = divs[j].querySelector('#series-pre');
+                        var typeClass = divs[j].querySelector('#series-mid');
+                        var arrOfArr = [];
+                        for(var s = 0; s < preFixes.rows.length; s++ ){
+                            var vlu = preFixes.rows[s].cells[1].querySelector('input').value;
+                            var txt = preFixes.rows[s].cells[2].querySelector('input').value;
+                            if(vlu != ''){
+                                var pfArry = [vlu, txt];
+                                arrOfArr.push(pfArry);
+                            };
+                        }
+
+                        lifts[iptVlu.value] = arrOfArr;
+                        // lifts.push(iptVlu.value + "-Type");
+                        var arrTofArr = [];
+                        for(var z = 0; z < typeClass.rows.length; z++){
+                            var tVlu = typeClass.rows[z].cells[1].querySelector('input').value;
+                            var tTxt = typeClass.rows[z].cells[2].querySelector('input').value;
+                            if(tVlu != ''){
+                                var midArry = [tVlu, tTxt];
+                                arrTofArr.push(midArry);
+                            };
+                        }
+                        lifts[iptVlu.value + "-Type"] = arrTofArr;
+                    };
+                    updatedPN.Lifts = lifts;
+
+                };
+                console.log(updatedPN);
+            };
+
             btn.onclick = function(){
                 addPrefixRow(['','']);
         	};
@@ -132,6 +175,10 @@
 
             sBtn.onclick = function(){
                 addSeries(['','']);
+            };
+
+            uBtn.onclick = function(){
+                updateSeries();
             };
 
         </script>
