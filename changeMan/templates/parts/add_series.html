@@ -31,6 +31,7 @@
         <button id="addBtn-mid">Add Row Mid</button>
         <button id="addBtn-part">Add New Series</button>
         <button id="update">Update</button>
+        <button id="sendBtn">Send it!</button>
     </body>
   
         <script>
@@ -40,6 +41,7 @@
             var midbtn = document.getElementById("addBtn-mid");
             var sBtn = document.getElementById("addBtn-part");
             var uBtn = document.getElementById("update");
+            var sendBtn = document.getElementById("sendBtn");
         	
 
 
@@ -123,10 +125,11 @@
 
             request.open("GET", "{{ STATIC_URL }}/static/javascript/part_number_data.json");
             request.send();
+            var updatedPN = {};
 
             function updateSeries(){
                 var divs = document.getElementsByClassName("tables-div");
-                var updatedPN = {};
+                // var updatedPN = {};
                 var lifts = [];
                 for(var j = 0; j < divs.length; j++){
                     var tbls = divs[j].querySelector('table');
@@ -146,7 +149,7 @@
                             };
                         }
 
-                        lifts[iptVlu.value] = arrOfArr;
+                        updatedPN[iptVlu.value] = arrOfArr;
                         // lifts.push(iptVlu.value + "-Type");
                         var arrTofArr = [];
                         for(var z = 0; z < typeClass.rows.length; z++){
@@ -157,7 +160,7 @@
                                 arrTofArr.push(midArry);
                             };
                         }
-                        lifts[iptVlu.value + "-Type"] = arrTofArr;
+                        updatedPN[iptVlu.value + "-Type"] = arrTofArr;
                     };
                     updatedPN.Lifts = lifts;
 
@@ -180,6 +183,43 @@
             uBtn.onclick = function(){
                 updateSeries();
             };
+
+            function getCookie(name){
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            sendBtn.onclick =function(){
+                var xhr = new XMLHttpRequest();
+                var url = "/parts/util/add_series/";
+                var csrftoken = getCookie('csrftoken');
+
+                xhr.open("POST", url, true);
+
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+
+                xhr.onreadystatechange = function (){
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                        console.log(this.responseText);
+                        console.log(data);
+                    }
+                };
+
+                var data = JSON.stringify(updatedPN);
+                xhr.send(data);
+            }
 
         </script>
         

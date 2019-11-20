@@ -72,13 +72,18 @@ def part_list(request):
     parts = Part.objects.all()
     return render(request, 'parts/part_list.html', {'parts': parts})
 
-def updateSeries(request): 
-    print(settings.STATICFILES_DIRS[0])
-    JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data.json'
-    print(JSON_PATH)
-    f = open(JSON_PATH, 'r')
-    pn_series = json.load(f)
-    part = Part.objects.all()
+
+def updateSeries(request):
+
+    if request.method == "POST":
+        pn_dict = json.loads(request.body)
+        print(json.dumps(pn_dict, indent=4, sort_keys=True))
+
+        JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data.json'
+        with open(JSON_PATH, 'w') as pn_json:
+            json.dump(pn_dict, pn_json)
+
+        return HttpResponse("OK")
 
     return render(request, 'parts/add_series.html')
 
