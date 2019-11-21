@@ -2,34 +2,52 @@
 {% block content %}
 {% if user.is_authenticated %}
 {% load static %}
+    <style>
+        table {
+            margin: 15px;
+        }
+
+        button {
+            margin: 10px;
+        }
+
+        .tables-div {
+            width: 75%;
+            margin: auto;
+        }
+    </style>
     <body>
+        <h1>Part Number Series Utility</h1>
         <div id="container">
             <div id="tbl-container" class="tables-div">
             	<table id="series-table">
             		<tr>
-            			<td>Part Series: </td>
-            			<td><input type="text"></td>
+            		  <td style="display:none;" >Part Series: </td>
+            		  <td style="display:none;"><input type="text"></td>
+                   
             		</tr>
                 </table>
                 <table id="series-pre">
             		<tr>
-            			<td>Part Series Pre-Fix:Value</td>
-            			<td><input type="text" class="pre-fix"></td>
-            			<td><input type="text" class="pre-value"></td>
+            		  <td style="display:none;">Part Series Pre-Fix:Value</td>
+            			<td style="display:none;"><input type="text" class="pre-fix"></td>
+            			<td style="display:none;"><input type="text" class="pre-value"></td>
             		</tr>
                 </table>
                 <table id="series-mid">
                     <tr>
-                        <td>Part Series Mid-Class:Value</td>
-                        <td><input type="text" class="mid-fix"></td>
-                        <td><input type="text" class="mid-value"></td>
+                        <td style="display:none;">Part Series Mid-Class:Value</td>
+                        <td style="display:none;"><input type="text" class="mid-fix"></td>
+                        <td style="display:none;"><input type="text" class="mid-value"></td>
+                    
                     </tr>
             	</table>
+               <!-- <button id="addBtn" style="display: none;">Add Row Pre</button>
+                <button id="addBtn-mid" style="display: none;">Add Row Mid</button>
+                -->
             </div>
-        </div>  
-    	<button id="addBtn">Add Row Pre</button>
-        <button id="addBtn-mid">Add Row Mid</button>
-        <button id="addBtn-part">Add New Series</button>
+        </div>
+        <button id="addBtn-part">Add New Series</button>  
         <button id="update">Update</button>
         <button id="sendBtn">Send it!</button>
     </body>
@@ -70,7 +88,7 @@
                 var preCell = row.insertCell(1);
                 var vluCell = row.insertCell(2);
 
-                textCell.innerHTML = 'Part Series Mid-Class:Value;';
+                textCell.innerHTML = 'Part Series Mid-Class:Value';
                 preCell.innerHTML = '<input type="text" class="mid-fix">';
                 vluCell.innerHTML = '<input type="text" class="mid-value">';
                 var preTxt = preCell.getElementsByTagName("input")[0];
@@ -83,11 +101,32 @@
                 var container = document.getElementById("container");
                 var tbls = document.getElementById("tbl-container");
                 var newTbles = tbls.cloneNode(true);
+                
                 newTbles.id = newTbles.id + '-' + values[0];
+                var newSeriesTbl = newTbles.querySelector("#series-table");
+                newSeriesTbl.rows[0].insertCell(0).innerHTML = "Part Series: ";
+                newSeriesTbl.rows[0].insertCell(1).innerHTML = '<input type="text">';
                 container.appendChild(newTbles);
                 var nsTxt = newTbles.getElementsByTagName("input")[0];
-                nsTxt.value = values[0];
-                
+                if(!values[0].includes('new')){
+                    nsTxt.value = values[0];
+                }
+                var tCont = document.getElementById("tbl-container-" + values[0]);
+
+                var midBtn = document.createElement("button");
+                var preBtn = document.createElement("button");
+                preBtn.innerHTML = "Add Row Pre";
+                midBtn.innerHTML = "Add Row Mid";
+                tCont.appendChild(preBtn);
+                tCont.appendChild(midBtn);
+
+                var btns = tCont.getElementsByTagName("button");
+                btns[0].classList.add("btn-" + values[0]);
+                btns[0].classList.add("btn-add-pre");
+                btns[1].classList.add("btn-" + values[0]);
+                btns[1].classList.add("btn-add-mid");
+                addListnerPre();
+                addListnerMid();
             }
 
             var request = new XMLHttpRequest();
@@ -95,7 +134,7 @@
             request.onload = function(){
                 if (request.status >= 200 && request.status < 300){
                     var currSeries = JSON.parse(request.responseText);
-                    console.log(currSeries);
+                    //console.log(currSeries);
                     for(let [key, value] of Object.entries(currSeries)){
                         if(key == "Lifts"){
                             for(var i = 0; i < value.length; i++){
@@ -121,6 +160,9 @@
                 else {
                     console.log(request.status)
                 }
+
+                addListnerPre();
+                addListnerMid();
             };
 
             request.open("GET", "{{ STATIC_URL }}/static/javascript/part_number_data.json");
@@ -134,7 +176,7 @@
                 for(var j = 0; j < divs.length; j++){
                     var tbls = divs[j].querySelector('table');
                     var iptVlu = tbls.querySelector('input');
-                    
+                   
                     if(iptVlu.value != ''){
                         lifts.push(iptVlu.value);
                         var preFixes = divs[j].querySelector('#series-pre');
@@ -168,16 +210,56 @@
                 console.log(updatedPN);
             };
 
-            btn.onclick = function(){
-                addPrefixRow(['','']);
-        	};
 
-            midbtn.onclick = function(){
-                addMidRow(['','']);
+            function addBlankRow(e){
+                //console.log(e.target.classList);
+                //console.log(e.target.classList[1].slice(-3));
+                var indicator = e.target.classList[1].slice(-3);
+                var series = document.getElementById("tbl-container" + e.target.classList[0].slice(3));
+                var tbl = series.querySelector("#series-" + indicator);
+                var row = tbl.insertRow(-1);
+                var textCell = row.insertCell(0);
+                var preCell = row.insertCell(1);
+                var vluCell = row.insertCell(2);
+                if(indicator == 'mid'){
+                    textCell.innerHTML = 'Part Series Mid-Class:Value';
+                    preCell.innerHTML = '<input type="text" class="mid-fix">';
+                    vluCell.innerHTML = '<input type="text" class="mid-value">';
+                }else{
+                    textCell.innerHTML = 'Part Series Pre-Fix:Value';
+                    preCell.innerHTML = '<input type="text" class="pre-fix">';
+                    vluCell.innerHTML = '<input type="text" class="pre-value">';
+                }
+               
+
             };
 
+            function addListnerPre(){
+                var allPreBtns = document.getElementsByClassName('btn-add-pre');
+                for(var l =0; l < allPreBtns.length; l++){
+                    if(allPreBtns[l].getAttribute('hasListener') != 'true'){
+                        allPreBtns[l].addEventListener("click",event => addBlankRow(event));
+                        allPreBtns[l].setAttribute('hasListener', 'true')
+                    }
+                }
+            };
+
+            function addListnerMid(){
+                var allMidBtns = document.getElementsByClassName('btn-add-mid');
+                for(var l =0; l < allMidBtns.length; l++){
+                    if(allMidBtns[l].getAttribute('hasListener') != 'true'){
+                        allMidBtns[l].addEventListener("click", event => addBlankRow(event));
+                        allMidBtns[l].setAttribute('hasListener', 'true')
+                    }
+                }
+            };
+
+            var newCnt = 0;
+
             sBtn.onclick = function(){
-                addSeries(['','']);
+
+                addSeries(['new-'+newCnt,'']);
+                newCnt = newCnt + 1; 
             };
 
             uBtn.onclick = function(){
@@ -204,7 +286,7 @@
                 var xhr = new XMLHttpRequest();
                 var url = "/parts/util/add_series/";
                 var csrftoken = getCookie('csrftoken');
-
+                updateSeries();
                 xhr.open("POST", url, true);
 
                 xhr.setRequestHeader("Content-Type", "application/json");
@@ -213,12 +295,12 @@
                 xhr.onreadystatechange = function (){
                     if(xhr.readyState === 4 && xhr.status === 200){
                         console.log(this.responseText);
-                        console.log(data);
                     }
                 };
 
                 var data = JSON.stringify(updatedPN);
                 xhr.send(data);
+                window.location.reload();
             }
 
         </script>

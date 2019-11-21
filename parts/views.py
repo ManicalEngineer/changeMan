@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.templatetags.static import static
 from django.conf import settings
+from datetime import date
 
 from .models import Part
 from changes.models import Revision, ECR
@@ -10,6 +11,7 @@ from .forms import AddPartForm
 
 import json
 import os
+
 # Create your views here.
 
 
@@ -78,8 +80,16 @@ def updateSeries(request):
     if request.method == "POST":
         pn_dict = json.loads(request.body)
         print(json.dumps(pn_dict, indent=4, sort_keys=True))
-
+        today = date.today()
+        dateStr = today.strftime("%d%b%y")
         JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data.json'
+        NEW_JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data' + dateStr + '.json'
+        i = 0
+        while os.path.exists(NEW_JSON_PATH):
+            NEW_JSON_PATH = settings.STATICFILES_DIRS[0] + '\\javascript\\part_number_data-' + dateStr + '-' + str(i) + '.json'
+            i = i + 1
+
+        os.rename(JSON_PATH, NEW_JSON_PATH)
         with open(JSON_PATH, 'w') as pn_json:
             json.dump(pn_dict, pn_json)
 
