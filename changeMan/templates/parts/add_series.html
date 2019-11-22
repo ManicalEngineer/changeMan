@@ -15,9 +15,23 @@
             width: 75%;
             margin: auto;
         }
+        #controls {
+            position: fixed;
+            margin-left: 50px;
+            background: rgba(0,0,255, .2);
+            padding: 15px;
+        }
+
+        #controls > button {
+            margin: 5px auto 0 auto;
+        }
     </style>
     <body>
         <h1>Part Number Series Utility</h1>
+        <div id="controls">
+            <button id="addBtn-part">Add New Series</button> <br> 
+            <button id="sendBtn">Send it!</button>
+        </div>
         <div id="container">
             <div id="tbl-container" class="tables-div">
             	<table id="series-table">
@@ -47,9 +61,6 @@
                 -->
             </div>
         </div>
-        <button id="addBtn-part">Add New Series</button>  
-        <button id="update">Update</button>
-        <button id="sendBtn">Send it!</button>
     </body>
   
         <script>
@@ -262,9 +273,9 @@
                 newCnt = newCnt + 1; 
             };
 
-            uBtn.onclick = function(){
-                updateSeries();
-            };
+            // uBtn.onclick = function(){
+            //     updateSeries();
+            // };
 
             function getCookie(name){
                 var cookieValue = null;
