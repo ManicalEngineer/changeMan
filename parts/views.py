@@ -71,7 +71,11 @@ def get_last(request):
 
 
 def part_list(request):
-    parts = Part.objects.all()
+    parts = Part.objects.all().order_by('part_number')
+    # deleteThis = Part.objects.get(part_number="O/H LINE EXT 8 FT")
+    # print(deleteThis)
+    # deleteThis.delete()
+
     return render(request, 'parts/part_list.html', {'parts': parts})
 
 
