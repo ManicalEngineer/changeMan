@@ -30,7 +30,8 @@ def add_part(request):
     return render(request, 'parts/add_part.html', {'form': form})
 
 
-def part(request, part_number):
+def part(request):
+    part_number = request.GET.get("part")
     part = Part.objects.get(pk=part_number)
     revs = Revision.objects.filter(revised_drawing=str(part_number))
     ecrs = ECR.objects.filter(part_numbers=str(part_number))
@@ -103,6 +104,7 @@ def updateSeries(request):
 
 
 def edit_part(request, part_number):
+
     part = Part.objects.get(pk=part_number)
     if request.method == "POST":
         form = AddPartForm(request.POST, instance=part)
