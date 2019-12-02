@@ -64,3 +64,15 @@ class Revision(models.Model):
     def __str__(self):
         rtn_str = self.revised_drawing.part_number + " Revision " + self.revision_level
         return rtn_str
+
+
+class Attachment(models.Model):
+    id = models.AutoField(primary_key=True)
+    upload_date = models.DateField(auto_now_add=True)
+    title = models.CharField(max_length=50, verbose_name="Attachment Title")
+    ECR_number = models.ForeignKey('ECR', on_delete=models.CASCADE, verbose_name="Related ECR Number", null=True, blank=True)
+    file = models.FileField(upload_to='attachments/')
+
+    def __str__(self):
+        rtn_str = self.title
+        return rtn_str

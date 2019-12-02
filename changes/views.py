@@ -9,7 +9,7 @@ from datetime import timedelta
 from .models import ECR, Revision, Notes
 from parts.models import Part
 from projects.models import Project
-from .forms import AddECRForm, CreateRevision, AddNoteForm
+from .forms import AddECRForm, CreateRevision, AddNoteForm, UploadForm
 
 # Create your views here.
 
@@ -39,9 +39,9 @@ def ecr_detail(request, ecr_number):
         if 'status' in request.POST.dict():
             form = AddECRForm(request.POST, instance=ecr)
             if getattr(ecr, 'status') != form['status'].value():
-                ECR.objects.filter(pk=ecr_number).update(status = form['status'].value())
+                ECR.objects.filter(pk=ecr_number).update(status=form['status'].value())
             if getattr(ecr, 'engineer') != form['engineer'].value():
-                ECR.objects.filter(pk=ecr_number).update(engineer = form['engineer'].value())
+                ECR.objects.filter(pk=ecr_number).update(engineer=form['engineer'].value())
             return redirect('ecr_detail', ecr_number=ecr.ECR_number)
         else:
             form = AddNoteForm(request.POST)
@@ -161,3 +161,15 @@ def performance(request):
     on_time_prct_p1_mo = on_time / len(closed_p1_ecos_mo)
 
     return render(request, 'changes/performance.html', {'ecos': closed_p1_ecos_mo, 'on_time': on_time_prct_p1_mo})
+
+
+def file_upload(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('<h1>Success!</h1>')
+    else:
+        form = UploadForm()
+
+    return render(request, 'changes/upload.html', {'form': form})

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import widgets
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from .models import ECR, Notes, Revision
+from .models import ECR, Notes, Revision, Attachment
 from parts.models import Part
 
 
@@ -43,3 +43,13 @@ class CreateRevision(forms.ModelForm):
     class Meta:
         model = Revision
         fields = ('revised_drawing', 'revision_level', 'description', 'ECR_number')
+
+
+class UploadForm(forms.ModelForm):
+
+    class Meta:
+        model = Attachment
+        fields = ('title', 'file', 'ECR_number')
+        widgets = {
+            'file': widgets.ClearableFileInput(attrs={'multiple': False})
+        }
