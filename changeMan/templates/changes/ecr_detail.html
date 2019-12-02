@@ -26,11 +26,25 @@
     Created on: {{ ecr.create_date }}<br>
     By: {{ ecr.initiated_by.first_name }} {{ ecr.initiated_by.last_name }}<br>
     Current Owner: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="fieldWrapper">
+            {{ ECRForm.engineer.errors }}
+            <label id="engineerLBL" for="{{ ECRForm.engineer.id_for_label }}">New Owner: </label>
+            {{ ECRForm.engineer }}
+      </div>
+      <div class="fieldWrapper">
+            {{ ECRForm.Status.errors }}
+            <label id="statusLBL" for="{{ ECRForm.status.id_for_label }}">Updated Status: </label>
+            {{ ECRForm.status }}
+      </div>
+      <button type="submit" name="update">Update</button>
+    </form>
     <div class="title">
       <h2>Affected Parts</h2>
       <div class="data">
         {% for part in ecr.part_numbers.all %}
-          <a href="{% url 'part_summary' part.part_number %}">{{ part.part_number }}: {{ part.part_description }}</a><br>
+          <a href="/part/?part={{ part.part_number }}">{{ part.part_number }}: {{ part.part_description }}</a><br>
         {% endfor %}<br>
       </div>
     </div>
@@ -66,7 +80,7 @@
           <form id="part-number-frm" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Add Note</button>
+            <button type="submit" name="add_note">Add Note</button>
           </form>
         
 

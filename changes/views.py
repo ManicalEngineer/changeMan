@@ -36,17 +36,26 @@ def ecr_detail(request, ecr_number):
     mf = ECR._meta.get_fields()
 
     if request.method == "POST":
-        form = AddNoteForm(request.POST)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.author = request.user
-            note.ecr_number = get_object_or_404(ECR, pk=ecr_number)
-            note = form.save()
+        if 'status' in request.POST.dict():
+            form = AddECRForm(request.POST, instance=ecr)
+            if getattr(ecr, 'status') != form['status'].value():
+                ECR.objects.filter(pk=ecr_number).update(status = form['status'].value())
+            if getattr(ecr, 'engineer') != form['engineer'].value():
+                ECR.objects.filter(pk=ecr_number).update(engineer = form['engineer'].value())
             return redirect('ecr_detail', ecr_number=ecr.ECR_number)
+        else:
+            form = AddNoteForm(request.POST)
+            if form.is_valid():
+                note = form.save(commit=False)
+                note.author = request.user
+                note.ecr_number = get_object_or_404(ECR, pk=ecr_number)
+                note = form.save()
+                return redirect('ecr_detail', ecr_number=ecr.ECR_number)
     else:
         form = AddNoteForm()
+        ECRForm = AddECRForm(instance=ecr)
 
-    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes, 'form': form})
+    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes, 'form': form, 'ECRForm': ECRForm})
 
 
 def ecr_add(request):
@@ -55,13 +64,6 @@ def ecr_add(request):
         if form.is_valid():
             ecr = form.save(commit=False)
             ecr.initiated_by = request.user
-
-            # if ecr.priority == '1':
-            #     ecr.deadline = ecr.create_date + timedelta(weeks=1)
-            # elif ecr.priority == '2':
-            #     ecr.deadline = ecr.create_date + timedelta(weeks=2)
-            # else:
-            #     ecr.deadline = ecr.create_date + timedelta(months=3)
 
             ecr = form.save()
 
