@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 {% if user.is_authenticated %}
-    <form action="" method="post" enctype="multipart/form-data">
+    <form enctype="multipart/form-data" method="POST" action=".">
       {% csrf_token %}
       {{ form.as_p }}
       <button type="submit">Upload</button>

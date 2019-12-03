@@ -1,15 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
 from datetime import timedelta
 
-from .models import ECR, Revision, Notes
+from .models import ECR, Revision, Notes, Attachment
 from parts.models import Part
 from projects.models import Project
 from .forms import AddECRForm, CreateRevision, AddNoteForm, UploadForm
+
+import mimetypes
 
 # Create your views here.
 
@@ -33,6 +35,7 @@ def ecr_list(request):
 def ecr_detail(request, ecr_number):
     ecr = get_object_or_404(ECR, pk=ecr_number)
     notes = Notes.objects.filter(ecr_number__exact=ecr_number)
+    attachments = Attachment.objects.filter(ECR_number__exact=ecr_number)
     mf = ECR._meta.get_fields()
 
     if request.method == "POST":
@@ -55,7 +58,7 @@ def ecr_detail(request, ecr_number):
         form = AddNoteForm()
         ECRForm = AddECRForm(instance=ecr)
 
-    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes, 'form': form, 'ECRForm': ECRForm})
+    return render(request, 'changes/ecr_detail.html', {'ecr': ecr, 'mf': mf, 'notes': notes, 'form': form, 'ECRForm': ECRForm, 'attachments': attachments})
 
 
 def ecr_add(request):
@@ -173,3 +176,14 @@ def file_upload(request):
         form = UploadForm()
 
     return render(request, 'changes/upload.html', {'form': form})
+
+def download(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        mime_type, _ = mimetypes.guess_type(file_path)
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type=mime_type)
+            response['Content-Disposition'] = "attachment; filename=" + os.path.basename(file_path)
+            return response
+    raise Http404
+

@@ -85,6 +85,12 @@
         
 
       </div>
+      <div>
+        {% for attachment in attachments %}
+          {{ attachment.title }}
+          {{ attachment.file }}
+        {% endfor %}
+      </div>
     </div>
 
 <a href="{% url 'ecr_detail' ecr.ECR_number|add:"-1" %}">Prev</a> <a href="{% url 'ecr_detail' ecr.ECR_number|add:"1" %}">Next</a>
