@@ -92,7 +92,7 @@
 {% for concept in concepts %}
 <span><a href="/download/{{ concept.media.name }}">{{ concept.media.name }}</span>
 {% endfor %}
-
+<a href="{% url 'file_upload' %}">Upload File</a>
 </body>
 
 

@@ -19,81 +19,204 @@
 
       }
       td {
-        padding: 0 10px 0 10px;
+        padding: 7px 10px 7px 10px;
       }
-    </style>
-    <h1><a href="{% url 'ecr_edit' ecr.ECR_number %}"> ECR{{ ecr.ECR_number }}: </a> {{ ecr.ecr_title }}  -  {{ ecr.get_status_display }}</h1>
-    Created on: {{ ecr.create_date }}<br>
-    By: {{ ecr.initiated_by.first_name }} {{ ecr.initiated_by.last_name }}<br>
-    Current Owner: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
-    <form method="POST">
-      {% csrf_token %}
-      <div class="fieldWrapper">
-            {{ ECRForm.engineer.errors }}
-            <label id="engineerLBL" for="{{ ECRForm.engineer.id_for_label }}">New Owner: </label>
-            {{ ECRForm.engineer }}
-      </div>
-      <div class="fieldWrapper">
-            {{ ECRForm.Status.errors }}
-            <label id="statusLBL" for="{{ ECRForm.status.id_for_label }}">Updated Status: </label>
-            {{ ECRForm.status }}
-      </div>
-      <button type="submit" name="update">Update</button>
-    </form>
-    <div class="title">
-      <h2>Affected Parts</h2>
-      <div class="data">
-        {% for part in ecr.part_numbers.all %}
-          <a href="/part/?part={{ part.part_number }}">{{ part.part_number }}: {{ part.part_description }}</a><br>
-        {% endfor %}<br>
-      </div>
-    </div>
-    <div class="title">
-      <h2>Description of Concern/Improvement</h2>
-      <div class="data">
-        {{ ecr.description }}
-      </div>
-    </div>
 
-    <div class="title">
-      
-      <div class="data">
-        {% if notes %}
-        <table>
-          <caption><h2>Notes</h2></caption>
-          <tr>
-            <th>Date</th>
-            <th>Note</th>
-            <th>Author</th>
-          </tr>
-            {% for note in notes %}
-              <tr> 
-                <td style="white-space: nowrap;">{{ note.create_date }}</td>
-                <td style="word-wrap: break-word;">{{ note.content }}</td>
-                <td>{{ note.author.first_name }} {{ note.author.last_name }} </td>
-              </tr>
-            {% endfor %}
-          </table>
-          {% else %}
-            <h2>No Notes</h2>
-          {% endif %}
-          <form id="part-number-frm" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" name="add_note">Add Note</button>
-          </form>
+      #container {
+        display: grid;
+        grid-template-columns: 10% 20% 20% 20% 20% auto;
+        grid-template-rows: 20px auto auto auto auto;
+      }
+
+      #base-info {
+        grid-column-start: 2;
+        grid-column-end: span 1;
+        grid-row: 2;
         
+        margin: auto;
+        line-height: 1.5em;
+      }
 
+      #base-info button {
+        width: 100px;
+        margin: auto;
+      }
+
+      #parts {
+        grid-column-start: 3;
+        grid-column-end: span 3;
+        grid-row-start: 2;
+        grid-row-end: span 2;
+        
+        }
+
+      #parts h2{
+        display: block;
+        text-align: center;
+      }
+
+      #desc {
+        grid-column-start: 2;
+        grid-column-end: span 1;
+        grid-row-start: 3;
+        grid-row-end: span 2;
+        
+      }
+
+      #desc div {
+        width: 100%;
+
+      }
+
+      #notes {
+        grid-column-start: 3;
+        grid-column-end: span 3;
+        grid-row-start: 4;
+        grid-row-end: span 2;
+        
+      }
+
+      #notes form {
+        width: 80%;
+      }
+
+      #attach {
+        grid-column-start: 2;
+        grid-column-end: span 1;
+        grid-row-start: 4;
+        grid-row-end: span 2;
+        padding: 2%;
+        margin-top: 10px;
+      }
+
+      #footer {
+        grid-column-start: 1;
+        grid-column-end: span 6;
+        grid-row-start: 6;
+        grid-row-end: span 1;
+        
+        margin: auto;
+      }
+
+      #next-btn {
+
+      }
+      #prev-btn {
+
+      }
+
+      #next-btn, #prev-btn {
+        top: 15px;
+      }
+      
+    </style>
+    <h1><a href="{% url 'ecr_edit' ecr.ECR_number %}"> ECR{{ ecr.ECR_number }}</a>: {{ ecr.ecr_title }}  -  {{ ecr.get_status_display }}</h1>
+    <div id="container">
+      <div id="base-info">
+        Created on: {{ ecr.create_date }}<br>
+        By: {{ ecr.initiated_by.first_name }} {{ ecr.initiated_by.last_name }}<br>
+        Current Owner: {{ ecr.engineer.first_name }} {{ ecr.engineer.last_name }}
+        <form method="POST">
+          {% csrf_token %}
+          <div class="fieldWrapper">
+                {{ ECRForm.engineer.errors }}
+                <label id="engineerLBL" for="{{ ECRForm.engineer.id_for_label }}">New Owner: </label>
+                {{ ECRForm.engineer }}
+          </div>
+          <div class="fieldWrapper">
+                {{ ECRForm.Status.errors }}
+                <label id="statusLBL" for="{{ ECRForm.status.id_for_label }}">Updated Status: </label>
+                {{ ECRForm.status }}
+          </div>
+          <button type="submit" name="update">Update</button>
+        </form>
       </div>
-      <div>
-        {% for attachment in attachments %}
-          {{ attachment.title }}
-          {{ attachment.file }}
-        {% endfor %}
+      <div id="parts" class="title">
+        
+        <div class="data">
+          <table>
+            <caption><h2>Affected Parts</h2></caption>
+            <tr>
+              <th>Part Number</th>
+              <th>Part Description</th>
+            </tr>
+            {% for part in ecr.part_numbers.all %}
+            <tr>
+              <td><a href="/part/?part={{ part.part_number }}">{{ part.part_number }}</a></td>
+              <td>{{ part.part_description }}</td>
+              <td><a class="button" href="{% url 'add_rev' part.part_number ecr.ECR_number %}">Add Revision</a></td>
+            </tr>
+            {% endfor %}<br>
+        </table>
+        </div>
+      </div>
+      <div id="desc" class="title">
+        <h2>Description of Concern/Improvement</h2>
+        <div class="data">
+          {{ ecr.description }}
+        </div>
+      </div>
+
+      <div id="notes" class="title">
+        
+        <div class="data">
+          {% if notes %}
+          <table>
+            <caption><h2>Notes</h2></caption>
+            <tr>
+              <th>Date</th>
+              <th>Note</th>
+              <th>Author</th>
+            </tr>
+              {% for note in notes %}
+                <tr> 
+                  <td style="white-space: nowrap;">{{ note.create_date }}</td>
+                  <td style="word-wrap: break-word;">{{ note.content }}</td>
+                  <td>{{ note.author.first_name }} {{ note.author.last_name }} </td>
+                </tr>
+              {% endfor %}
+            </table>
+            {% else %}
+              <h2>No Notes</h2>
+            {% endif %}
+            <form id="part-number-frm" method="POST">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" name="add_note">Add Note</button>
+            </form>
+          
+
+        </div>
+        </div>
+        <div id="attach">
+          {% if attachments %}
+          <table>
+            <caption><h2>Attachments</h2>
+              <a class="button" href="{% url 'file_upload' %}">Upload Attachment</a>
+            </caption>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>File</th>
+            </tr>
+              {% for attachment in attachments %}
+                <tr> 
+                  <td style="white-space: nowrap;">{{ attachment.upload_date }}</td>
+                  <td style="word-wrap: break-word;">{{ attachment.title }}</td>
+                  <td><a href="{% url 'download' attachment.file.path %}">{{ attachment.file }}</a></td>
+                </tr>
+              {% endfor %}
+            </table>
+            {% else %}
+              <h2>No Attachments</h2>
+              <a class="button" href="{% url 'file_upload' %}">Upload Attachment</a>
+            {% endif %}
+        </div>
+      
+      <div id="footer">
+        <a id="prev-btn" class="button" href="{% url 'ecr_detail' ecr.ECR_number|add:"-1" %}">Prev</a> <a id="next-btn" class="button" href="{% url 'ecr_detail' ecr.ECR_number|add:"1" %}">Next</a>
       </div>
     </div>
-
-<a href="{% url 'ecr_detail' ecr.ECR_number|add:"-1" %}">Prev</a> <a href="{% url 'ecr_detail' ecr.ECR_number|add:"1" %}">Next</a>
 {% else %}
    {% include 'redirect.html' %}
 {% endif %}

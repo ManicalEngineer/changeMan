@@ -12,8 +12,11 @@ from projects.models import Project
 from .forms import AddECRForm, CreateRevision, AddNoteForm, UploadForm
 
 import mimetypes
+import os
+import re
 
 # Create your views here.
+REFERER = ""
 
 
 def dashboard(request):
@@ -167,15 +170,21 @@ def performance(request):
 
 
 def file_upload(request):
+
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponse('<h1>Success!</h1>')
+            print(form.cleaned_data['project'])
+            if form.cleaned_data['ECR_number'] != None:
+                return redirect('ecr_detail', ecr_number=form.cleaned_data['ECR_number'].ECR_number)
+            elif form.cleaned_data['project'] != None:
+                return redirect('project', id=form.cleaned_data['project'].id)
     else:
         form = UploadForm()
 
     return render(request, 'changes/upload.html', {'form': form})
+
 
 def download(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
@@ -186,4 +195,3 @@ def download(request, path):
             response['Content-Disposition'] = "attachment; filename=" + os.path.basename(file_path)
             return response
     raise Http404
-

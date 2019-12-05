@@ -35,10 +35,11 @@ urlpatterns = [
     path('ecr/edit/<int:ecr_number>/', cViews.ecr_edit, name="ecr_edit"),
     path('ecr/', cViews.ecr_list, name="ecr_list"),
     path('utilities/upload/', cViews.file_upload, name="file_upload"),
+    path('utilities/download/<str:path>', cViews.download, name="download"),
     path('rev/add/<str:drawing_number>/<int:ecr_number>/', cViews.revise_drawing, name="add_rev"),
     path('performance/', cViews.performance, name="performance"),
     path('project/', pViews.project_list, name="project_list"),
     path('project/<int:id>', pViews.project, name="project"),
     path('project/add/', pViews.add_project, name="add_project"),
-    path('download/projects/<str:path>', pViews.download_media, name="download"),
+    #path('download/projects/<str:path>', pViews.download_media, name="download"),
 ]

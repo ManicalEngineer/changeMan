@@ -4,9 +4,49 @@
 {% if user.is_authenticated %}
     <form enctype="multipart/form-data" method="POST" action=".">
       {% csrf_token %}
-      {{ form.as_p }}
+        {{ form.non_field_errors }}
+      
+        <div class="fieldWrapper">
+          {{ form.title.errors }}
+          <label id="titleLBL" for="{{ form.title.id_for_label }}">Attachment Title: </label>
+          {{ form.title }}
+        </div>
+
+        <div class="fieldWrapper">
+          {{ form.file.errors }}
+          <label id="fileLBL" for="{{ form.file.id_for_label }}">File to Upload: </label>
+          {{ form.file }}
+        </div>
+
+        <div class="fieldWrapper" id="ecr-ref">
+          {{ form.ECR_number.errors }}
+          <label id="ECR_numberLBL" for="{{ form.ECR_number.id_for_label }}">Attach to ECR: </label>
+          {{ form.ECR_number }}
+        </div>
+
+        <div class="fieldWrapper" id="proj-ref">
+          {{ form.project.errors }}
+          <label id="projectLBL" for="{{ form.project.id_for_label }}">Attach to Project: </label>
+          {{ form.project }}
+        </div>
+       
       <button type="submit">Upload</button>
     </form>
+
+    <script type="text/javascript">
+    	var referrer = document.referrer;
+    	var ecrSelect = document.getElementById("ecr-ref");
+    	var projSelect = document.getElementById("proj-ref");
+    	
+    	if(referrer.includes('ecr')){
+    		ecrSelect.style.display = "block";
+    		projSelect.style.display = "none";
+    	}else if (referrer.includes('project')){
+    		projSelect.style.display = "block";
+    		ecrSelect.style.display = "none";
+    	}
+    </script>
+
  {% else %}
  {% include 'redirect.html' %}
  {% endif %}

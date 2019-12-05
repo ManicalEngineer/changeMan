@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 
 from parts import models as partModels
+from projects import models as projectModels
 
 
 # Create your models here.
@@ -71,6 +72,7 @@ class Attachment(models.Model):
     upload_date = models.DateField(auto_now_add=True)
     title = models.CharField(max_length=50, verbose_name="Attachment Title")
     ECR_number = models.ForeignKey('ECR', on_delete=models.CASCADE, verbose_name="Related ECR Number", null=True, blank=True)
+    project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, verbose_name="Related Project", null=True, blank=True)
     file = models.FileField(upload_to='attachments/')
 
     def __str__(self):

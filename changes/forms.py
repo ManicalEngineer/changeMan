@@ -49,7 +49,7 @@ class UploadForm(forms.ModelForm):
 
     class Meta:
         model = Attachment
-        fields = ('title', 'file', 'ECR_number')
+        fields = ('title', 'file', 'ECR_number', 'project')
         widgets = {
             'file': widgets.ClearableFileInput(attrs={'multiple': True})
         }
