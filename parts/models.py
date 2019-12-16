@@ -13,6 +13,7 @@ class Part(models.Model):
     create_date = models.DateField(auto_now_add=True)
     initiated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     in_syteline = models.BooleanField(default=False)
+    controled = models.BooleanField(default=False)
     notes = models.CharField(max_length=300, blank=True, null=True)
 
     def __str__(self):

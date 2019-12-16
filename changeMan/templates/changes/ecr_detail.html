@@ -141,11 +141,19 @@
               <th>Part Description</th>
             </tr>
             {% for part in ecr.part_numbers.all %}
-            <tr>
-              <td><a href="/part/?part={{ part.part_number }}">{{ part.part_number }}</a></td>
-              <td>{{ part.part_description }}</td>
-              <td><a class="button" href="{% url 'add_rev' part.part_number ecr.ECR_number %}">Add Revision</a></td>
-            </tr>
+            {% if part.controled %}
+              <tr>
+                <td style="background: rgba(255, 255, 0, .5)"><a href="/part/?part={{ part.part_number }}">{{ part.part_number }}</a></td>
+                <td style="background: rgba(255, 255, 0, .5)">{{ part.part_description }}</td>
+                <td style="background: rgba(255, 255, 0, .5)"><a class="button" href="{% url 'add_rev' part.part_number ecr.ECR_number %}">Add Revision</a></td>
+              </tr>
+            {% else %}
+              <tr>
+                <td><a href="/part/?part={{ part.part_number }}">{{ part.part_number }}</a></td>
+                <td>{{ part.part_description }}</td>
+                <td><a class="button" href="{% url 'add_rev' part.part_number ecr.ECR_number %}">Add Revision</a></td>
+              </tr>
+            {% endif %}
             {% endfor %}<br>
         </table>
         </div>
