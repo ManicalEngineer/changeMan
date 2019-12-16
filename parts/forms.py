@@ -8,7 +8,7 @@ class AddPartForm(forms.ModelForm):
 
     class Meta:
         model = Part
-        fields = ('part_number', 'part_description', 'drawing_only', 'in_syteline', 'notes')
+        fields = ('part_number', 'part_description', 'drawing_only', 'in_syteline', 'controled', 'notes')
         widgets = {
             'notes': widgets.Textarea(),
         }
